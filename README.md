@@ -5,5 +5,4 @@ dir: done
 du: done  
 mtime: done  
 delete: done (TODO: Object Store directory delete)  
-
-
+  
