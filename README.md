@@ -7,4 +7,5 @@ mtime: done
 delete: done (TODO: Object Store directory delete)  
 mkdir: done  
 rmdir: done  
-rename: done (Object Store?)    
+rename: done (Object Store?)  
+symlink: done (FS: target / OS: destination?)  
