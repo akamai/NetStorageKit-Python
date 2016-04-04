@@ -33,3 +33,22 @@ class Netstorage:
         response = requests.get(request_url, headers=headers)
 
         return response
+
+    def download(self, path):
+        self.acs_action = self.acs_action.format("download")
+        self.acs_auth_data = self.acs_auth_data.format(time.time(), str(random.getrandbits(32)), self.keyname)
+        self.sign_string = self.sign_string.format(path, self.acs_action)
+
+        message = self.acs_auth_data + self.sign_string
+
+        hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
+        acs_auth_sign = base64.b64encode(hash_)
+
+        request_url = "http://{}{}".format(self.hostname, path)
+        headers = { 'X-Akamai-ACS-Action': self.acs_action,
+                    'X-Akamai-ACS-Auth-Data': self.acs_auth_data,
+                    'X-Akamai-ACS-Auth-Sign': acs_auth_sign }
+
+        response = requests.get(request_url, headers=headers)
+
+        return response
