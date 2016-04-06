@@ -9,7 +9,7 @@ class Netstorage:
         self.keyname = keyname
         self.key = key
         
-        self.METHODS = {'GET': 0, 'POST': 1}
+        self.METHODS = {'GET': 0, 'POST': 1, 'PUT': 2}
 
 
     def request(self, **kwargs):
@@ -19,7 +19,6 @@ class Netstorage:
             str(random.getrandbits(32)), 
             self.keyname)
         sign_string = "{}\nx-akamai-acs-action:{}\n".format(kwargs['path'], acs_action)
-
         message = acs_auth_data + sign_string
 
         hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
@@ -41,6 +40,14 @@ class Netstorage:
                         'Content-Length': 0,
                         'Accept-Encoding': 'identity' }
             response = requests.post(request_url, headers=headers)
+        elif kwargs['method'] == self.METHODS['PUT']:
+            headers = { 'X-Akamai-ACS-Action': acs_action,
+                        'X-Akamai-ACS-Auth-Data': acs_auth_data,
+                        'X-Akamai-ACS-Auth-Sign': acs_auth_sign,
+                        'Content-Length': kwargs['size'],
+                        'Accept-Encoding': 'identity' }
+            response = requests.put(request_url, headers=headers, data=kwargs['data'])
+
 
         return response
 
@@ -96,3 +103,20 @@ class Netstorage:
                             method=self.METHODS['POST'],
                             path=source)
 
+    def upload(self, source, destination):
+        data = None
+        try:
+            with open(source, 'r') as f:
+                data = f.read()
+        except Exception:
+            print('hello')
+            return
+
+        from hashlib import sha256
+        sha256_ = sha256(data.encode()).hexdigest()
+        
+        return self.request(action='upload&size={}&sha256={}'.format(len(data), sha256_),
+                            method=self.METHODS['PUT'],
+                            size=len(data),
+                            data=data,
+                            path=destination)
