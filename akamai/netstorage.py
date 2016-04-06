@@ -8,47 +8,91 @@ class Netstorage:
         self.hostname = hostname
         self.keyname = keyname
         self.key = key
+        
+        self.METHODS = {'GET': 0, 'POST': 1}
 
-        self.acs_action = "version=1&action={}&format=xml"
-        self.acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}"
-        self.sign_string = "{}\nx-akamai-acs-action:{}\n"
 
-        self.message = ""
+    def request(self, **kwargs):
+        acs_action = "version=1&action={}".format(kwargs['action'])
+        acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(
+            time.time(), 
+            str(random.getrandbits(32)), 
+            self.keyname)
+        sign_string = "{}\nx-akamai-acs-action:{}\n".format(kwargs['path'], acs_action)
+
+        message = acs_auth_data + sign_string
+
+        hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
+        acs_auth_sign = base64.b64encode(hash_)
+        
+        request_url = "http://{}{}".format(self.hostname, kwargs['path'])
+
+        response = None
+        if kwargs['method'] == self.METHODS['GET']:
+            headers = { 'X-Akamai-ACS-Action': acs_action,
+                        'X-Akamai-ACS-Auth-Data': acs_auth_data,
+                        'X-Akamai-ACS-Auth-Sign': acs_auth_sign }
+            response = requests.get(request_url, headers=headers)
+
+        elif kwargs['method'] == self.METHODS['POST']:
+            headers = { 'X-Akamai-ACS-Action': acs_action,
+                        'X-Akamai-ACS-Auth-Data': acs_auth_data,
+                        'X-Akamai-ACS-Auth-Sign': acs_auth_sign,
+                        'Content-Length': 0,
+                        'Accept-Encoding': 'identity' }
+            response = requests.post(request_url, headers=headers)
+
+        return response
+
 
     def dir(self, path):
-        self.acs_action = self.acs_action.format("dir")
-        self.acs_auth_data = self.acs_auth_data.format(time.time(), str(random.getrandbits(32)), self.keyname)
-        self.sign_string = self.sign_string.format(path, self.acs_action)
-
-        message = self.acs_auth_data + self.sign_string
-
-        hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
-        acs_auth_sign = base64.b64encode(hash_)
-
-        request_url = "http://{}{}".format(self.hostname, path)
-        headers = { 'X-Akamai-ACS-Action': self.acs_action,
-                    'X-Akamai-ACS-Auth-Data': self.acs_auth_data,
-                    'X-Akamai-ACS-Auth-Sign': acs_auth_sign }
-
-        response = requests.get(request_url, headers=headers)
-
-        return response
+        return self.request(action='dir&format=xml', 
+                            method=self.METHODS['GET'], 
+                            path=path)
 
     def download(self, path):
-        self.acs_action = self.acs_action.format("download")
-        self.acs_auth_data = self.acs_auth_data.format(time.time(), str(random.getrandbits(32)), self.keyname)
-        self.sign_string = self.sign_string.format(path, self.acs_action)
+        return self.request(action='download', 
+                            method=self.METHODS['GET'], 
+                            path=path)
 
-        message = self.acs_auth_data + self.sign_string
+    def du(self, path):
+        return self.request(action='du&format=xml',
+                            method=self.METHODS['GET'], 
+                            path=path)
 
-        hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
-        acs_auth_sign = base64.b64encode(hash_)
+    def stat(self, path):
+        return self.request(action='stat&format=xml',
+                            method=self.METHODS['GET'],
+                            path=path)
 
-        request_url = "http://{}{}".format(self.hostname, path)
-        headers = { 'X-Akamai-ACS-Action': self.acs_action,
-                    'X-Akamai-ACS-Auth-Data': self.acs_auth_data,
-                    'X-Akamai-ACS-Auth-Sign': acs_auth_sign }
+    def mkdir(self, path):
+        return self.request(action='mkdir',
+                            method=self.METHODS['POST'], 
+                            path=path)
 
-        response = requests.get(request_url, headers=headers)
+    def rmdir(self, path):
+        return self.request(action='rmdir',
+                            method=self.METHODS['POST'],
+                            path=path)
 
-        return response
+    def mtime(self, path, mtime):
+        return self.request(action='mtime&format=xml&mtime={}'.format(mtime),
+                            method=self.METHODS['POST'], 
+                            path=path)
+
+    def delete(self, path):
+        return self.request(action='delete',
+                            method=self.METHODS['POST'], 
+                            path=path)
+
+    def quick_delete(self, path):
+        return self.request(action='quick-delete&quick-delete=imreallyreallysure',
+                            method=self.METHODS['POST'], 
+                            path=path)
+
+    def rename(self, source, destination):
+        from urllib.parse import quote_plus
+        return self.request(action='rename&destination={}'.format(quote_plus(destination)),
+                            method=self.METHODS['POST'],
+                            path=source)
+
