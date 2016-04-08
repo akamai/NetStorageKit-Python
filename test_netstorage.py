@@ -20,5 +20,5 @@
 from akamai.netstorage import Netstorage
 
 ns = Netstorage("astin-nsu.akamaihd.net", "astinastin" ,"key")
-res = ns.upload("/Users/achoi/Projects/netstorage-python/spike/mkdir.py", "/360949/abcdef.py")
+res = ns.upload("/Users/achoi/Desktop/1459911370.523473.py.zip", "/360949/abcdef.zip")
 print(res)

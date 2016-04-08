@@ -108,8 +108,8 @@ class Netstorage:
         try:
             with open(source, 'r') as f:
                 data = f.read()
-        except Exception:
-            print('hello')
+        except Exception as e:
+            print(e)
             return
 
         from hashlib import sha256

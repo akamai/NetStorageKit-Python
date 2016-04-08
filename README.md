@@ -1,8 +1,9 @@
 # netstorage-python
 Akamai Netstorage API for Python  
 
-upload : doing
-form upload vs binary upload
+upload : doing  
+form upload vs binary upload  
+zipfile uplaod  
 
 dir: done  
 du: done  
