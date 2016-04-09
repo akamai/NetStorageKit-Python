@@ -104,16 +104,17 @@ class Netstorage:
                             path=source)
 
     def upload(self, source, destination):
+        import os
         data = None
         try:
-            with open(source, 'r') as f:
-                data = f.read()
+            f = os.open(source, os.O_RDONLY)
+            data = os.read(f, 100)
         except Exception as e:
             print(e)
             return
 
         from hashlib import sha256
-        sha256_ = sha256(data.encode()).hexdigest()
+        sha256_ = sha256(data).hexdigest()
         
         return self.request(action='upload&size={}&sha256={}'.format(len(data), sha256_),
                             method=self.METHODS['PUT'],
