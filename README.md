@@ -2,8 +2,7 @@
 Akamai Netstorage API for Python  
 
 upload : doing  
-form upload vs binary upload  
-zipfile uplaod  
+trying form and zip upload with documents  
 
 dir: done  
 du: done  

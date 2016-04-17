@@ -48,7 +48,7 @@ class Netstorage:
                         'Accept-Encoding': 'identity' }
             response = requests.put(request_url, headers=headers, data=kwargs['data'])
 
-
+        print(headers)
         return response
 
 
@@ -108,16 +108,16 @@ class Netstorage:
         data = None
         try:
             f = os.open(source, os.O_RDONLY)
-            data = os.read(f, 100)
+            data = os.read(f, 0)
         except Exception as e:
-            print(e)
-            return
+            return e
 
         from hashlib import sha256
         sha256_ = sha256(data).hexdigest()
+        f_size = len(data)
         
-        return self.request(action='upload&size={}&sha256={}'.format(len(data), sha256_),
+        return self.request(action='upload&upload-type=binary&index-zip=1&size={}&sha256={}'.format(f_size, sha256_),
                             method=self.METHODS['PUT'],
-                            size=len(data),
+                            size=f_size,
                             data=data,
                             path=destination)
