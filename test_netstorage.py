@@ -20,6 +20,7 @@
 from akamai.netstorage import Netstorage
 from spike import secrets
 
-ns = Netstorage("astin-nsu.akamaihd.net", "astinastin" , secrets.key)
+# ns = Netstorage("astin-nsu.akamaihd.net", "astinastin" , secrets.key)
+ns = Netstorage("astin-nsu.akamaihd.net", "astinaspera" , secrets.key)
 res = ns.upload("/Users/achoi/Desktop/1459911370.523473.py", "/360949/abcdef.py")
 print(res)

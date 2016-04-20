@@ -116,7 +116,7 @@ class Netstorage:
         sha256_ = sha256(data).hexdigest()
         f_size = len(data)
         
-        return self.request(action='upload&upload-type=binary&index-zip=1&size={}&sha256={}'.format(f_size, sha256_),
+        return self.request(action='upload&upload-type=binary&size={}&sha256={}'.format(f_size, sha256_),
                             method=self.METHODS['PUT'],
                             size=f_size,
                             data=data,
