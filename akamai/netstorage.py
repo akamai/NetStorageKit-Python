@@ -40,6 +40,7 @@ class Netstorage:
                         'Content-Length': 0,
                         'Accept-Encoding': 'identity' }
             response = requests.post(request_url, headers=headers)
+
         elif kwargs['method'] == self.METHODS['PUT']:
             headers = { 'X-Akamai-ACS-Action': acs_action,
                         'X-Akamai-ACS-Auth-Data': acs_auth_data,
@@ -108,13 +109,13 @@ class Netstorage:
         data = None
         try:
             f = os.open(source, os.O_RDONLY)
-            data = os.read(f, 0)
+            f_size = os.stat(source).st_size
+            data = os.read(f, f_size)
         except Exception as e:
             return e
 
         from hashlib import sha256
         sha256_ = sha256(data).hexdigest()
-        f_size = len(data)
         
         return self.request(action='upload&upload-type=binary&size={}&sha256={}'.format(f_size, sha256_),
                             method=self.METHODS['PUT'],
