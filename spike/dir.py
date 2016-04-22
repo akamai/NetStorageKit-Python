@@ -25,5 +25,4 @@ headers = { 'X-Akamai-ACS-Action': acs_action,
 
 response = requests.get(url, headers=headers)
 
-print(response.headers)
 print(response.text)
