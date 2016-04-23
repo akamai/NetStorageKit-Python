@@ -9,7 +9,7 @@ key_name = "astinastin"
 key = secrets.key
 hostname = "astin-nsu.akamaihd.net"
 acs_action = "version=1&action=du&format=xml"
-path = "/360949"
+path = "/360949/vp"
 
 acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(time.time(), str(random.getrandbits(32)), key_name)
 sign_string = "{}\nx-akamai-acs-action:{}\n".format(path, acs_action)

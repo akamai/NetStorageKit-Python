@@ -9,7 +9,7 @@ key_name = "astinastin"
 key = secrets.key
 hostname = "astin-nsu.akamaihd.net"
 acs_action = "version=1&action=download"
-path = "/360949/rtmpplayer110.html"
+path = "/360949/abcdef.py.zip"
 
 acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(time.time(), str(random.getrandbits(32)), key_name)
 sign_string = "{}\nx-akamai-acs-action:{}\n".format(path, acs_action)

@@ -8,8 +8,8 @@ import secrets
 key_name = "astinastin"
 key = secrets.key
 hostname = "astin-nsu.akamaihd.net"
-acs_action = "version=1&action=mtime&format=xml&mtime=1260000000"
-path = "/360949/rtmpplayer11.html"
+acs_action = "version=1&action=mtime&format=xml&mtime=1461381125"
+path = "/360949/rtmpplayer10.html"
 
 acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(time.time(), str(random.getrandbits(32)), key_name)
 sign_string = "{}\nx-akamai-acs-action:{}\n".format(path, acs_action)
@@ -29,3 +29,4 @@ response = requests.post(url, headers=headers)
 
 print(response.headers)
 print(response.text)
+print(response.status_code)

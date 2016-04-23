@@ -1,4 +1,6 @@
+from urllib.parse import quote_plus
 import base64, time, random, hmac
+
 import requests
 
 
@@ -98,10 +100,14 @@ class Netstorage:
                             path=path)
 
     def rename(self, source, destination):
-        from urllib.parse import quote_plus
         return self.request(action='rename&destination={}'.format(quote_plus(destination)),
                             method=self.METHODS['POST'],
                             path=source)
+
+    def symlink(self, target, destination):
+        return self.request(action='symlink&target={}'.format(quote_plus(target)),
+                            method=self.METHODS['POST'],
+                            path=destination)
 
     def upload(self, source, destination):
         import os
