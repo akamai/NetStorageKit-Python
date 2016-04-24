@@ -15,3 +15,4 @@ rename: done (Object Store?)
 symlink: done (FS: target / OS: destination?)  
 quick-delete: - (need privilege / only OS)  
 list: - (only os)  
+download: ? / considering how to handle existing file..

@@ -119,7 +119,6 @@ class Netstorage:
         finally:
             os.close(f)
 
-
         from hashlib import sha256
         sha256_ = sha256(data).hexdigest()
         
