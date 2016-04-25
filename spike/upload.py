@@ -19,7 +19,8 @@ size = len(data)
 
 acs_action = "version=1&action=upload&size={}&sha256={}".format(size, sha256_)
 
-path = "/360949/" + str(time.time()) + ".py"
+# path = "/360949/" + str(time.time()) + ".py"
+path = "/360949/testtest.py"
 
 acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(time.time(), str(random.getrandbits(32)), key_name)
 sign_string = "{}\nx-akamai-acs-action:{}\n".format(path, acs_action)
@@ -33,7 +34,7 @@ headers = { 'X-Akamai-ACS-Action': acs_action,
             'X-Akamai-ACS-Auth-Data': acs_auth_data,
             'X-Akamai-ACS-Auth-Sign': acs_auth_sign,
             'Content-Length': size, 
-            'Accept-Encoding': 'identity' }
+            'Accept-Encoding': 'identity', }
 
 response = requests.put(url, headers=headers, data=data)
 

@@ -27,3 +27,4 @@ response = requests.get(url, headers=headers)
 
 print(response.headers)
 print(response.text)
+print(response.status_code)
