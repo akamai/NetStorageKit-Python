@@ -23,12 +23,7 @@ class Netstorage:
         data = b''
         f = os.open(source, os.O_RDONLY)
         try:
-            while True:
-                chunk = os.read(f, 1024*1024)
-                if chunk:
-                    data += chunk
-                else:
-                    break
+            chunk = os.read(f, os.stat(source).st_size)
         finally:
             os.close(f)
         
