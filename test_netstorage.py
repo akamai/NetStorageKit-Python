@@ -4,9 +4,7 @@ import xml.etree.ElementTree as ET
 from akamai.netstorage import Netstorage
 from spike import secrets
 
-# TODO:
-# download
-# dir with refactoring
+
 class TestNetstorage(unittest.TestCase):
     
     def setUp(self):
@@ -18,16 +16,24 @@ class TestNetstorage(unittest.TestCase):
         self.ns = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
         
     def tearDown(self):
+        # delete temp files from local
         if os.path.exists(self.temp_file):
             os.remove(self.temp_file)
-
-    def is_file_exist(self, name):
-        pass
-
-    def is_dir_exist(self, name):
-        pass
-
+        
+        if os.path.exists(self.temp_file + '_rename'):
+            os.remove(self.temp_file + '_rename')
+        
+        # delete temp files for netstorage    
+        self.ns.delete(self.temp_ns_file)
+        self.ns.delete(self.temp_ns_file + '_lnk')
+        self.ns.delete(self.temp_ns_file + '_rename')
+        self.ns.rmdir(self.temp_ns_dir)
+        
     def test_netstorage(self):
+        # dir
+        res = self.ns.dir("/" + self.cpcode_path)
+        self.assertEqual(200, res.status_code)
+    
         # mkdir
         res = self.ns.mkdir(self.temp_ns_dir)
         self.assertEqual(200, res.status_code)
@@ -62,6 +68,10 @@ class TestNetstorage(unittest.TestCase):
         # rename
         res = self.ns.rename(self.temp_ns_file, self.temp_ns_file + "_rename")
         self.assertEqual(200, res.status_code)
+        
+        # download
+        res = self.ns.download(self.temp_ns_file + "_rename")
+        self.assertEqual(200, res.status_code)
 
         # delete
         res = self.ns.delete(self.temp_ns_file + "_rename")
@@ -70,21 +80,9 @@ class TestNetstorage(unittest.TestCase):
         self.assertEqual(200, res.status_code)
 
         # rmdir
-        res = self.ns.rmdir(self.cpcode_path + self.temp_ns_dir)
+        res = self.ns.rmdir(self.temp_ns_dir)
         self.assertEqual(200, res.status_code)
 
 
 if __name__ == '__main__':
     unittest.main()
-
-# from akamai.netstorage import Netstorage
-# from spike import secrets
-
-# ns = Netstorage("astin-nsu.akamaihd.net", "astinastin" , secrets.key)
-# # ns = Netstorage("astin-nsu.akamaihd.net", "astinaspera" , secrets.key)
-# res = ns.upload("/Users/achoi/Desktop/1459911370.523473.py.zip", "/360949/abcdef.py.zip")
-# print(res)
-
-# mkdir
-# upload -> download -> dir -> stat -> symlink -> mtime -> du -> rename
-# delete -> rmdir

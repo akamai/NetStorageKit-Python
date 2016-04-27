@@ -1,6 +1,6 @@
 from urllib.parse import quote_plus
 from hashlib import sha256
-import base64, time, random, hmac, os
+import base64, time, random, hmac, os, ntpath
 
 import requests
 
@@ -21,12 +21,9 @@ class Netstorage:
     
     def upload_data_to_request(self, source):
         data = b''
-        f = os.open(source, os.O_RDONLY)
-        try:
-            chunk = os.read(f, os.stat(source).st_size)
-        finally:
-            os.close(f)
-        
+        with open(source, 'br') as f:
+            data = f.read()
+
         return data
 
     def request(self, **kwargs):
@@ -70,6 +67,9 @@ class Netstorage:
                             path=path)
 
     def download(self, path, destination=''):
+        if path and not destination:
+            destination = ntpath.basename(path)
+            
         return self.request(action='download', 
                             method='GET',
                             path=path,
