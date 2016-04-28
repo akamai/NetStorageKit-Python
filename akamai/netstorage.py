@@ -10,8 +10,15 @@ class Netstorage:
         self.hostname = hostname
         self.keyname = keyname
         self.key = key
+    
+    def _read_in_chunks(self, file_object, chunk_size=1024*1024):
+        while True:
+            data = file_object.read(chunk_size)
+            if not data:
+                break
+            yield data
         
-    def download_data_from_response(self, response, destination):
+    def _download_data_from_response(self, response, destination):
         f_size = -1
         if destination and response.status_code == 200:
             with open(destination, 'bw') as f:
@@ -19,10 +26,10 @@ class Netstorage:
         
         return f_size
     
-    def upload_data_to_request(self, source):
+    def _upload_data_to_request(self, source):
         data = b''
         with open(source, 'br') as f:
-            data = f.read()
+            data = b''.join([chunk for chunk in self._read_in_chunks(f)])
 
         return data
 
@@ -47,7 +54,7 @@ class Netstorage:
         if kwargs['method'] == 'GET':
             response = requests.get(request_url, headers=headers)
             if kwargs['action'] == 'download':
-                self.download_data_from_response(response, kwargs['destination'])
+                self._download_data_from_response(response, kwargs['destination'])
 
         elif kwargs['method'] == 'POST':
             headers['Content-Length'] = 0
@@ -121,7 +128,7 @@ class Netstorage:
                             path=destination)
     
     def upload(self, source, destination):        
-        data = self.upload_data_to_request(source)
+        data = self._upload_data_to_request(source)
         f_size = len(data) # os.stat(source).st_size
         sha256_ = sha256(data).hexdigest()
         

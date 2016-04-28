@@ -13,10 +13,10 @@ class TestNetstorage(unittest.TestCase):
         self.temp_file = "{}.txt".format(str(uuid.uuid4()))
         self.temp_ns_file = "{}/{}".format(self.temp_ns_dir, self.temp_file)
         
-        self.ns = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
+        self.ns = Netstorage("astin-nsu.akamaihd.net", "astinapi", secrets.key)
         
     def tearDown(self):
-        # delete temp files from local
+        # delete temp files for local
         if os.path.exists(self.temp_file):
             os.remove(self.temp_file)
         
