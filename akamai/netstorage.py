@@ -11,20 +11,19 @@ class Netstorage:
         self.keyname = keyname
         self.key = key
     
-    def _read_in_chunks(self, file_object, chunk_size=1024*1024):
+    def _read_in_chunks(self, file_object, chunk_size=1024):
         while True:
             data = file_object.read(chunk_size)
             if not data:
                 break
             yield data
         
-    def _download_data_from_response(self, response, destination):
-        f_size = -1
+    def _download_data_from_response(self, response, destination, chunk_size=1024):
         if destination and response.status_code == 200:
             with open(destination, 'bw') as f:
-                f_size = f.write(response.content)
-        
-        return f_size
+                for chunk in response.iter_content(chunk_size):
+                    f.write(chunk)
+                    f.flush()
     
     def _upload_data_to_request(self, source):
         data = b''
@@ -33,7 +32,7 @@ class Netstorage:
 
         return data
 
-    def request(self, **kwargs):
+    def _request(self, **kwargs):
         acs_action = "version=1&action={}".format(kwargs['action'])
         acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(
             time.time(), 
@@ -50,6 +49,7 @@ class Netstorage:
         headers = { 'X-Akamai-ACS-Action': acs_action,
                     'X-Akamai-ACS-Auth-Data': acs_auth_data,
                     'X-Akamai-ACS-Auth-Sign': acs_auth_sign }
+        
         response = None
         if kwargs['method'] == 'GET':
             response = requests.get(request_url, headers=headers)
@@ -69,7 +69,7 @@ class Netstorage:
         return response
 
     def dir(self, path):
-        return self.request(action='dir&format=xml', 
+        return self._request(action='dir&format=xml', 
                             method='GET', 
                             path=path)
 
@@ -77,53 +77,53 @@ class Netstorage:
         if path and not destination:
             destination = ntpath.basename(path)
             
-        return self.request(action='download', 
+        return self._request(action='download', 
                             method='GET',
                             path=path,
                             destination=destination)
 
     def du(self, path):
-        return self.request(action='du&format=xml',
+        return self._request(action='du&format=xml',
                             method='GET', 
                             path=path)
 
     def stat(self, path):
-        return self.request(action='stat&format=xml',
+        return self._request(action='stat&format=xml',
                             method='GET',
                             path=path)
 
     def mkdir(self, path):
-        return self.request(action='mkdir',
+        return self._request(action='mkdir',
                             method='POST', 
                             path=path)
 
     def rmdir(self, path):
-        return self.request(action='rmdir',
+        return self._request(action='rmdir',
                             method='POST',
                             path=path)
 
     def mtime(self, path, mtime):
-        return self.request(action='mtime&format=xml&mtime={}'.format(mtime),
+        return self._request(action='mtime&format=xml&mtime={}'.format(mtime),
                             method='POST', 
                             path=path)
 
     def delete(self, path):
-        return self.request(action='delete',
+        return self._request(action='delete',
                             method='POST', 
                             path=path)
 
     def quick_delete(self, path):
-        return self.request(action='quick-delete&quick-delete=imreallyreallysure',
+        return self._request(action='quick-delete&quick-delete=imreallyreallysure',
                             method='POST', 
                             path=path)
 
     def rename(self, source, destination):
-        return self.request(action='rename&destination={}'.format(quote_plus(destination)),
+        return self._request(action='rename&destination={}'.format(quote_plus(destination)),
                             method='POST',
                             path=source)
 
     def symlink(self, target, destination):
-        return self.request(action='symlink&target={}'.format(quote_plus(target)),
+        return self._request(action='symlink&target={}'.format(quote_plus(target)),
                             method='POST',
                             path=destination)
     
@@ -132,7 +132,7 @@ class Netstorage:
         f_size = len(data) # os.stat(source).st_size
         sha256_ = sha256(data).hexdigest()
         
-        return self.request(action='upload&upload-type=binary&size={}&sha256={}'.format(f_size, sha256_),
+        return self._request(action='upload&upload-type=binary&size={}&sha256={}'.format(f_size, sha256_),
                             method='PUT',
                             size=f_size,
                             data=data,
