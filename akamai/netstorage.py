@@ -66,7 +66,7 @@ class Netstorage:
             headers['Accept-Encoding'] = 'identity'
             response = requests.put(request_url, headers=headers, data=kwargs['data'])
 
-        return response
+        return response.status_code == 200, response
 
     def dir(self, path):
         return self._request(action='dir&format=xml', 
@@ -74,8 +74,11 @@ class Netstorage:
                             path=path)
 
     def download(self, path, destination=''):
+        file_name = ntpath.basename(path)
         if path and not destination:
-            destination = ntpath.basename(path)
+            destination = file_name
+        elif path and not ntpath.basename(destination): 
+            destination = "{}{}".format(destination, file_name)
             
         return self._request(action='download', 
                             method='GET',

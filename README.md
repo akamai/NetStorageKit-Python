@@ -21,3 +21,8 @@ symlink: done (FS: target / OS: destination?)
 quick-delete: - (need privilege / only OS)    
 list: - (only os)  
 download: done  
+
+===========  
+Note    
+===========  
+can raise the exception in upload/download about file handling  
