@@ -4,8 +4,8 @@ Akamai Netstorage API for Python
 ===========  
 todo list  
 ===========  
-logging / exception handling / pypi   
-upload: zip-index=1 / form-upload  
+Test object store > pypi   
+upload: zip-index=1 / form-upload / chunked upload with netstorage log  
   
 ===========  
 command list  
@@ -25,4 +25,4 @@ download: done
 ===========  
 Note    
 ===========  
-can raise the exception in upload/download about file handling  
+User TODO: can raise the exception in upload/download about file handling and Logging  

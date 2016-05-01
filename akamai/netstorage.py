@@ -130,7 +130,7 @@ class Netstorage:
                             method='POST',
                             path=destination)
     
-    def upload(self, source, destination):        
+    def upload(self, source, destination):
         data = self._upload_data_to_request(source)
         f_size = len(data) # os.stat(source).st_size
         sha256_ = sha256(data).hexdigest()
