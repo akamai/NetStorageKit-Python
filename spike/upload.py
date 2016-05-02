@@ -11,16 +11,16 @@ key_name = "astinastin"
 key = secrets.key
 hostname = "astin-nsu.akamaihd.net"
 
-with open('symlink.py', 'r') as f:
+with open('/Users/achoi/Desktop/3-18.mp4', 'rb') as f:
     data = f.read()
 
-sha256_ = sha256(data.encode()).hexdigest()
+sha256_ = sha256(data).hexdigest()
 size = len(data)
-
-acs_action = "version=1&action=upload&size={}&sha256={}".format(size, sha256_)
+print(size)
+acs_action = "version=1&action=upload&upload-type=binary&size={}&sha256={}".format(size, sha256_)
 
 # path = "/360949/" + str(time.time()) + ".py"
-path = "/360949/testtest.py"
+path = "/360949/testtest.mp4"
 
 acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(time.time(), str(random.getrandbits(32)), key_name)
 sign_string = "{}\nx-akamai-acs-action:{}\n".format(path, acs_action)

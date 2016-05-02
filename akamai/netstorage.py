@@ -64,8 +64,9 @@ class Netstorage:
         elif kwargs['method'] == 'PUT':
             headers['Content-Length'] = kwargs['size']
             headers['Accept-Encoding'] = 'identity'
+            print(len(kwargs['data']))
             response = requests.put(request_url, headers=headers, data=kwargs['data'])
-
+            
         return response.status_code == 200, response
 
     def dir(self, path):

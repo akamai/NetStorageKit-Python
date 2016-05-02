@@ -8,12 +8,16 @@ from spike import secrets
 class TestNetstorage(unittest.TestCase):
     
     def setUp(self):
-        self.cpcode_path = "360949"
+        # self.cpcode_path = "360949"
+        self.cpcode_path = "407617"
         self.temp_ns_dir = "/{}/{}".format(self.cpcode_path, str(uuid.uuid4()))
         self.temp_file = "{}.txt".format(str(uuid.uuid4()))
         self.temp_ns_file = "{}/{}".format(self.temp_ns_dir, self.temp_file)
         
-        self.ns = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
+        # self.ns = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
+        self.ns = Netstorage("astinobj-nsu.akamaihd.net", "astinobj", secrets.key)
+        
+
         
     def tearDown(self):
         # delete temp files for local
