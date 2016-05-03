@@ -11,14 +11,14 @@ class Netstorage:
         self.keyname = keyname
         self.key = key
     
-    def _read_in_chunks(self, file_object, chunk_size=1024):
+    def _read_in_chunks(self, file_object, chunk_size=4096):
         while True:
             data = file_object.read(chunk_size)
             if not data:
                 break
             yield data
         
-    def _download_data_from_response(self, response, destination, chunk_size=1024):
+    def _download_data_from_response(self, response, destination, chunk_size=4096):
         if destination and response.status_code == 200:
             with open(destination, 'bw') as f:
                 for chunk in response.iter_content(chunk_size):
@@ -35,7 +35,7 @@ class Netstorage:
     def _request(self, **kwargs):
         acs_action = "version=1&action={}".format(kwargs['action'])
         acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(
-            time.time(), 
+            int(time.time()), 
             str(random.getrandbits(32)), 
             self.keyname)
         sign_string = "{}\nx-akamai-acs-action:{}\n".format(kwargs['path'], acs_action)
@@ -64,7 +64,6 @@ class Netstorage:
         elif kwargs['method'] == 'PUT':
             headers['Content-Length'] = kwargs['size']
             headers['Accept-Encoding'] = 'identity'
-            print(len(kwargs['data']))
             response = requests.put(request_url, headers=headers, data=kwargs['data'])
             
         return response.status_code == 200, response
@@ -135,7 +134,6 @@ class Netstorage:
         data = self._upload_data_to_request(source)
         f_size = len(data) # os.stat(source).st_size
         sha256_ = sha256(data).hexdigest()
-        
         return self._request(action='upload&upload-type=binary&size={}&sha256={}'.format(f_size, sha256_),
                             method='PUT',
                             size=f_size,

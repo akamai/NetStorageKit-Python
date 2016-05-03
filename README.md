@@ -4,7 +4,9 @@ Akamai Netstorage API for Python
 ===========  
 todo list  
 ===========  
-Test object store > pypi   
+Test object store : Done
+cannot upload file more than 2GB..
+pypi upload   
 upload: zip-index=1 / form-upload / chunked upload with netstorage log  
   
 ===========  

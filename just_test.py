@@ -3,6 +3,10 @@ from spike import secrets
 
 aaa = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
 
-ok, res = aaa.upload('/Users/achoi/Desktop/3-18.mp4', '/360949/3-12232.mp4')
-print(res)
+ok, _ = aaa.upload('/Users/achoi/Desktop/hello1234.mov', '/360949/astinapi/3312232.mov')
+# print(res)
 print(ok)
+
+# bbb = Netstorage("astinobj-nsu.akamaihd.net", "astinobj", secrets.key_obj)
+
+# ok, _ = bbb.upload('/Users/achoi/Desktop/hello1234.mov', '/407617/3312232.mov')

@@ -15,7 +15,7 @@ class TestNetstorage(unittest.TestCase):
         self.temp_ns_file = "{}/{}".format(self.temp_ns_dir, self.temp_file)
         
         # self.ns = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
-        self.ns = Netstorage("astinobj-nsu.akamaihd.net", "astinobj", secrets.key)
+        self.ns = Netstorage("astinobj-nsu.akamaihd.net", "astinobj", secrets.key_obj)
         
 
         
