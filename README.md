@@ -6,6 +6,7 @@ todo list
 ===========  
 Test object store : Done
 cannot upload file more than 2GB..
+testing: big file with https://github.com/akamai-open/NetStorageKit-Java
 pypi upload   
 upload: zip-index=1 / form-upload / chunked upload with netstorage log  
   
