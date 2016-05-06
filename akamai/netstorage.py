@@ -1,7 +1,10 @@
-from urllib.parse import quote_plus
 from hashlib import sha256
-import base64, time, random, hmac, os, ntpath
-
+import base64, hmac, mmap, ntpath, random, time
+try:
+    from urllib import quote_plus # python2
+except ImportError:
+    from urllib.parse import quote_plus # python3
+    
 import requests
 
 
@@ -10,15 +13,8 @@ class Netstorage:
         self.hostname = hostname
         self.keyname = keyname
         self.key = key
-    
-    def _read_in_chunks(self, file_object, chunk_size=4096):
-        while True:
-            data = file_object.read(chunk_size)
-            if not data:
-                break
-            yield data
         
-    def _download_data_from_response(self, response, destination, chunk_size=4096):
+    def _download_data_from_response(self, response, destination, chunk_size=16*1024):
         if destination and response.status_code == 200:
             with open(destination, 'bw') as f:
                 for chunk in response.iter_content(chunk_size):
@@ -26,11 +22,10 @@ class Netstorage:
                     f.flush()
     
     def _upload_data_to_request(self, source):
-        data = b''
         with open(source, 'br') as f:
-            data = b''.join([chunk for chunk in self._read_in_chunks(f)])
+            mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
-        return data
+        return mmapped_data
 
     def _request(self, **kwargs):
         acs_action = "version=1&action={}".format(kwargs['action'])
@@ -62,9 +57,11 @@ class Netstorage:
             response = requests.post(request_url, headers=headers)
 
         elif kwargs['method'] == 'PUT':
+            mmapped_data = kwargs['data']
             headers['Content-Length'] = kwargs['size']
             headers['Accept-Encoding'] = 'identity'
-            response = requests.put(request_url, headers=headers, data=kwargs['data'])
+            response = requests.put(request_url, headers=headers, data=mmapped_data)
+            mmapped_data.close()
             
         return response.status_code == 200, response
 
@@ -134,7 +131,7 @@ class Netstorage:
         data = self._upload_data_to_request(source)
         f_size = len(data) # os.stat(source).st_size
         sha256_ = sha256(data).hexdigest()
-        return self._request(action='upload&upload-type=binary&size={}&sha256={}'.format(f_size, sha256_),
+        return self._request(action='upload&size={}&sha256={}'.format(f_size, sha256_),
                             method='PUT',
                             size=f_size,
                             data=data,
