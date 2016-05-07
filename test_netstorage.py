@@ -1,19 +1,27 @@
+# -*- coding: utf-8 -*-
+
 import unittest, uuid, os, time
 import xml.etree.ElementTree as ET
 
-from akamai.netstorage import Netstorage
+from netstorageapi import Netstorage
 from spike import secrets
+
+
+YOUR_CPCODE = "360949"
+YOUR_HOSTNAME = "astin-nsu.akamaihd.net"
+YOUR_KEYNAME = "astinastin"
+YOUR_KEY = secrets.key
 
 
 class TestNetstorage(unittest.TestCase):
     
     def setUp(self):
-        self.cpcode_path = "360949"
+        self.cpcode_path = YOUR_CPCODE
         self.temp_ns_dir = "/{}/{}".format(self.cpcode_path, str(uuid.uuid4()))
         self.temp_file = "{}.txt".format(str(uuid.uuid4()))
         self.temp_ns_file = "{}/{}".format(self.temp_ns_dir, self.temp_file)
         
-        self.ns = Netstorage("astin-nsu.akamaihd.net", "astinastin", secrets.key)
+        self.ns = Netstorage(YOUR_HOSTNAME, YOUR_KEYNAME, YOUR_KEY)
         
     def tearDown(self):
         # delete temp files for local

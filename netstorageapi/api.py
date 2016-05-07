@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from hashlib import sha256
 import base64, hmac, mmap, ntpath, random, time
 try:
-    from urllib import quote_plus # python2
-except ImportError:
     from urllib.parse import quote_plus # python3
+except ImportError:
+    from urllib import quote_plus # python2
     
 import requests
 
@@ -16,13 +18,13 @@ class Netstorage:
         
     def _download_data_from_response(self, response, destination, chunk_size=16*1024):
         if destination and response.status_code == 200:
-            with open(destination, 'bw') as f:
+            with open(destination, 'wb') as f:
                 for chunk in response.iter_content(chunk_size):
                     f.write(chunk)
                     f.flush()
     
     def _upload_data_to_request(self, source):
-        with open(source, 'br') as f:
+        with open(source, 'rb') as f:
             mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 
         return mmapped_data
@@ -35,8 +37,11 @@ class Netstorage:
             self.keyname)
         sign_string = "{}\nx-akamai-acs-action:{}\n".format(kwargs['path'], acs_action)
         message = acs_auth_data + sign_string
-
-        hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
+        try:
+            hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
+        except AttributeError:
+            hash_ = hmac.new(self.key.encode(), message.encode(), sha256).digest()
+            
         acs_auth_sign = base64.b64encode(hash_)
         
         request_url = "http://{}{}".format(self.hostname, kwargs['path'])
@@ -129,7 +134,7 @@ class Netstorage:
     
     def upload(self, source, destination):
         data = self._upload_data_to_request(source)
-        f_size = len(data) # os.stat(source).st_size
+        f_size = len(data)
         sha256_ = sha256(data).hexdigest()
         return self._request(action='upload&size={}&sha256={}'.format(f_size, sha256_),
                             method='PUT',

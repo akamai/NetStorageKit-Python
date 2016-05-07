@@ -63,4 +63,5 @@ target/
 
 # others
 .DS_Store
+spike/
 secrets.py
