@@ -11,7 +11,7 @@ NetstorageAPI supports Python 2.6 — 3.5, and runs great on PyPy as `requests <
 Installation
 ------------
 
-To install netstorage:  
+To install NetstorageAPI:  
 
 .. code-block:: bash
 
