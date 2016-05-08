@@ -48,19 +48,19 @@ class TestNetstorage(unittest.TestCase):
         
     def test_netstorage(self):
         # dir
-        ok, res = self.ns.dir("/" + self.cpcode_path)
+        ok, _ = self.ns.dir("/" + self.cpcode_path)
         self.assertEqual(True, ok, "dir fail.")
         print("[TEST] dir {} done".format("/" + self.cpcode_path))
 
         # mkdir
-        ok, res = self.ns.mkdir(self.temp_ns_dir)
+        ok, _ = self.ns.mkdir(self.temp_ns_dir)
         self.assertEqual(True, ok, "mkdir fail.")
         print("[TEST] mkdir {} done".format(self.temp_ns_dir))
 
         # upload
         with open(self.temp_file, 'wt') as f:
             f.write("Hello, Netstorage API World!")
-        ok, res = self.ns.upload(self.temp_file, self.temp_ns_file)
+        ok, _ = self.ns.upload(self.temp_file, self.temp_ns_file)
         self.assertEqual(True, ok, "upload fail.")
         print("[TEST] upload {} to {} done".format(self.temp_file, self.temp_ns_file))
 
@@ -73,7 +73,7 @@ class TestNetstorage(unittest.TestCase):
 
         # mtime
         current_time = int(time.time())
-        ok, res = self.ns.mtime(self.temp_ns_file, current_time)
+        ok, _ = self.ns.mtime(self.temp_ns_file, current_time)
         self.assertEqual(True, ok, "mtime fail.")
         print("[TEST] mtime {} to {} done".format(self.temp_ns_file, current_time))
 
@@ -85,30 +85,30 @@ class TestNetstorage(unittest.TestCase):
         print("[TEST] stat done")
 
         # symlink
-        ok, res = self.ns.symlink(self.temp_ns_file, self.temp_ns_file + "_lnk")
+        ok, _ = self.ns.symlink(self.temp_ns_file, self.temp_ns_file + "_lnk")
         self.assertEqual(True, ok, "symlink fail.")
         print("[TEST] symlink {} to {} done".format(self.temp_ns_file, self.temp_ns_file + "_lnk"))
 
         # rename
-        ok, res = self.ns.rename(self.temp_ns_file, self.temp_ns_file + "_rename")
+        ok, _ = self.ns.rename(self.temp_ns_file, self.temp_ns_file + "_rename")
         self.assertEqual(True, ok, "rename fail.")
         print("[TEST] rename {} to {} done".format(self.temp_ns_file, self.temp_ns_file + "_rename"))
         
         # download
-        ok, res = self.ns.download(self.temp_ns_file + "_rename")
+        ok, _ = self.ns.download(self.temp_ns_file + "_rename")
         self.assertEqual(True, ok, "download fail.")
         print("[TEST] download {} done".format(self.temp_ns_file + "_rename"))
 
         # delete
-        ok, res = self.ns.delete(self.temp_ns_file + "_rename")
+        ok, _ = self.ns.delete(self.temp_ns_file + "_rename")
         self.assertEqual(True, ok, "delete fail.")
         print("[TEST] delete {} done".format(self.temp_ns_file + "_rename"))
-        ok, res = self.ns.delete(self.temp_ns_file + "_lnk")
+        ok, _ = self.ns.delete(self.temp_ns_file + "_lnk")
         self.assertEqual(True, ok, "delete fail.")
         print("[TEST] delete {} done".format(self.temp_ns_file + "_lnk"))
 
         # rmdir
-        ok, res = self.ns.rmdir(self.temp_ns_dir)
+        ok, _ = self.ns.rmdir(self.temp_ns_dir)
         self.assertEqual(True, ok, "rmdir fail.")
         print("[TEST] rmdir {} done".format(self.temp_ns_dir))
 

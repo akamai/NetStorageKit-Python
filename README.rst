@@ -95,7 +95,7 @@ You can test all above methods with unittest `script <https://github.com/AstinCH
     [TEARDOWN] remove 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_rename from local done
     .
     ----------------------------------------------------------------------
-    Ran 1 test in 6.040s
+    Ran 1 test in 3.705s
 
     OK
 
