@@ -35,13 +35,13 @@ Example
     >>> netstorage_destination = '/NS_CPCODE/hello.txt' # or '/NS_CPCODE/' is same.
     >>> ok, response = ns.upload(local_source, netstorage_destination)
     >>> ok
-    >>> True # means 200 OK; If False, it's not 200 OK
+    True # means 200 OK; If False, it's not 200 OK
     >>> response
-    >>> <Response [200]> # Response object from requests.get|post|put
+    <Response [200]> # Response object from requests.get|post|put
     >>> response.status_code
-    >>> 200
+    200
     >>> response.text
-    >>> '<HTML>Request Processed</HTML>\n'
+    '<HTML>Request Processed</HTML>\n'
     >>>
     
 
