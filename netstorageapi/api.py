@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from hashlib import sha256
-import base64, hmac, mmap, ntpath, random, time
-try:
+import base64, hmac, mmap, ntpath, random, sys, time
+if sys.version_info[0] >= 3:
     from urllib.parse import quote_plus # python3
-except ImportError:
+else:
     from urllib import quote_plus # python2
     
 import requests
@@ -37,9 +37,9 @@ class Netstorage:
             self.keyname)
         sign_string = "{}\nx-akamai-acs-action:{}\n".format(kwargs['path'], acs_action)
         message = acs_auth_data + sign_string
-        try:
+        if sys.version_info[0] >= 3:
             hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
-        except AttributeError:
+        else:
             hash_ = hmac.new(self.key.encode(), message.encode(), sha256).digest()
             
         acs_auth_sign = base64.b64encode(hash_)
@@ -133,6 +133,9 @@ class Netstorage:
                             path=destination)
     
     def upload(self, source, destination):
+        if source and not ntpath.basename(destination):
+            destination = "{}{}".format(destination, ntpath.basename(source))
+
         data = self._upload_data_to_request(source)
         f_size = len(data)
         sha256_ = sha256(data).hexdigest()
