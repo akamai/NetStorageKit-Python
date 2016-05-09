@@ -3,9 +3,9 @@
 from hashlib import sha256
 import base64, hmac, mmap, ntpath, random, sys, time
 if sys.version_info[0] >= 3:
-    from urllib.parse import quote_plus # python3
+    from urllib.parse import quote_plus, quote # python3
 else:
-    from urllib import quote_plus # python2
+    from urllib import quote_plus, quote # python2
     
 import requests
 
@@ -30,12 +30,13 @@ class Netstorage:
         return mmapped_data
 
     def _request(self, **kwargs):
+        path = quote(kwargs['path'])
         acs_action = "version=1&action={}".format(kwargs['action'])
         acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {}, {}, {}".format(
             int(time.time()), 
             str(random.getrandbits(32)), 
             self.keyname)
-        sign_string = "{}\nx-akamai-acs-action:{}\n".format(kwargs['path'], acs_action)
+        sign_string = "{}\nx-akamai-acs-action:{}\n".format(path, acs_action)
         message = acs_auth_data + sign_string
         if sys.version_info[0] >= 3:
             hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
@@ -44,7 +45,7 @@ class Netstorage:
             
         acs_auth_sign = base64.b64encode(hash_)
         
-        request_url = "http://{}{}".format(self.hostname, kwargs['path'])
+        request_url = "http://{}{}".format(self.hostname, path)
         
         headers = { 'X-Akamai-ACS-Action': acs_action,
                     'X-Akamai-ACS-Auth-Data': acs_auth_data,

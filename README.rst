@@ -43,7 +43,10 @@ Example
     >>> response.text
     '<HTML>Request Processed</HTML>\n'
     >>>
-    
+    >>> response.encoding 
+    'ISO-8859-1' # requests makes educated guesses about the encoding of the response based on the HTTP headers.
+    >>> response.encoding = 'utf-8' # You can change the response encoding.
+    >>>
 
 Methods
 -------
