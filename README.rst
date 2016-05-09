@@ -23,7 +23,7 @@ Example
 
 .. code-block:: python
 
-    >>> from netstorageapi import Netstorage
+    >>> from akamai.netstorageapi import Netstorage
     >>>
     >>> NS_HOSTNAME = 'astin-nsu.akamaihd.net'
     >>> NS_KEYNAME = 'astinastin'

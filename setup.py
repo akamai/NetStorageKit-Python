@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
+
 
 from distutils.core import setup
 
@@ -8,14 +10,15 @@ with open('README.rst', 'r') as f:
 
 setup (
     name = 'netstorageapi',
-    version = '1.0.7',
+    version = '1.0.8',
     description = 'Akamai Netstorage API for Python',
     long_description = readme,
-    packages = ['netstorageapi'],
-    package_dir = {'netstorageapi': 'netstorageapi'},
+    packages=['akamai'],
+    package_dir={'akamai': 'akamai'},
     author = 'Astin Choi',
     author_email = 'asciineo@gmail.com',
     url = 'https://github.com/AstinCHOI/akamai-netstorage',
+    license='Apache 2.0',
     classifiers=(
         'Intended Audience :: Developers',
         'Programming Language :: Python',
