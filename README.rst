@@ -32,7 +32,7 @@ Example
     >>>
     >>> ns = Netstorage(NS_HOSTNAME, NS_KEYNAME, NS_KEY)
     >>> local_source = 'hello.txt'
-    >>> netstorage_destination = '/NS_CPCODE/hello.txt' # or '/NS_CPCODE/' is same.
+    >>> netstorage_destination = '/{}/hello.txt'.format(NS_CPCODE) # or '/{}/'.format(NS_CPCODE) is same.
     >>> ok, response = ns.upload(local_source, netstorage_destination)
     >>> ok
     True # means 200 OK; If False, it's not 200 OK
