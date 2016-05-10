@@ -15,6 +15,9 @@ setup (
     long_description = readme,
     packages=['akamai'],
     package_dir={'akamai': 'akamai'},
+    install_requires = [
+        'requests'
+    ],
     author = 'Astin Choi',
     author_email = 'asciineo@gmail.com',
     url = 'https://github.com/AstinCHOI/akamai-netstorage',
