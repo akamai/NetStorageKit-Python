@@ -39,9 +39,9 @@ def print_result(response):
 
 if __name__ == '__main__':
     action_list = \
-    '''     dir: to list the contents of the directory /123456
+    '''         dir: to list the contents of the directory /123456
             dir /123456
-         upload: To upload file.txt to /123456 directory
+         upload: to upload file.txt to /123456 directory
             upload file.txt /123456/ or
             upload file.txt /123456/file.txt
          stat: to display status of /123456/file.txt
@@ -69,13 +69,13 @@ if __name__ == '__main__':
 
     parser.add_option(
         '-H', '--host', dest='hostname',
-        help='Netstorage API hostname. ex) xxx-nsu.akamaihd.net')
+        help='Netstorage API hostname ex) xxx-nsu.akamaihd.net')
     parser.add_option(
         '-k', '--keyname', dest='keyname',
-        help='Netstorage API keyname. ex) xxxxx')
+        help='Netstorage API keyname ex) xxxxx')
     parser.add_option(
         '-K', '--key', dest='key',
-        help='Netstorage API key. ex) xxxxxxxxxxxxx')
+        help='Netstorage API key ex) xxxxxxxxxxxxx')
     parser.add_option(
         '-a', '--action', dest='action')
 
