@@ -1,11 +1,11 @@
 NetstorageAPI: Akamai Netstorage API for Python
-================================================
+===============================================
 
 .. image:: https://img.shields.io/pypi/v/netstorageapi.svg
     :target: https://pypi.python.org/pypi/netstorageapi
 
-NetstorageAPI is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org/en/master/>`_.
-NetstorageAPI supports Python 2.6 — 3.5, and runs great on PyPy as `requests <https://github.com/kennethreitz/requests>`_.
+NetstorageAPI is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
+NetstorageAPI supports Python 2.6 — 3.5, and runs great on PyPy as `requests <http://docs.python-requests.org>`_.
 
 
 Installation
@@ -76,7 +76,7 @@ Methods
 Test
 ----
 
-You can test all above methods with unittest `script <https://github.com/AstinCHOI/netstorage-python/blob/master/test_netstorage.py>`_
+You can test all above methods with `unittest script <https://github.com/AstinCHOI/netstorage-python/blob/master/test_netstorage.py>`_
 (NOTE: You should input NS_HOSTNAME, NS_KEYNAME, NS_KEY and NS_CPCODE in the script):
 
 .. code-block:: bash
@@ -102,3 +102,14 @@ You can test all above methods with unittest `script <https://github.com/AstinCH
 
     OK
 
+
+Command
+-------
+
+You can run the `script <https://github.com/AstinCHOI/netstorage-python/blob/master/cms_netstorage.py>` with command line parameters.
+
+.. code-block:: bash
+
+    $ python cms_netstorage.py -H astin-nsu.akamaihd.net -k astinastin -K xxxxxxxxxx -a dir /360949
+    
+Use -h or --help option for more detail.
