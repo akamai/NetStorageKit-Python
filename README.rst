@@ -106,7 +106,7 @@ You can test all above methods with `unittest script <https://github.com/AstinCH
 Command
 -------
 
-You can run the `script <https://github.com/AstinCHOI/netstorage-python/blob/master/cms_netstorage.py>` with command line parameters.
+You can run the `script <https://github.com/AstinCHOI/netstorage-python/blob/master/cms_netstorage.py>`_ with command line parameters.
 
 .. code-block:: bash
 
