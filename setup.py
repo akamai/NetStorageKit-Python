@@ -10,7 +10,7 @@ with open('README.rst', 'r') as f:
 
 setup (
     name = 'netstorageapi',
-    version = '1.1.0',
+    version = '1.1.1',
     description = 'Akamai Netstorage API for Python',
     long_description = readme,
     packages=['akamai'],

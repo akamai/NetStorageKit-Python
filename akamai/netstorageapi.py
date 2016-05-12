@@ -49,12 +49,12 @@ class Netstorage:
 
     def _request(self, **kwargs):
         path = quote(kwargs['path'])
-        acs_action = "version=1&action=%s" % (kwargs['action'])
-        acs_auth_data = "5, 0.0.0.0, 0.0.0.0, %s, %s, %s" % (
+        acs_action = "version=1&action={0}".format(kwargs['action'])
+        acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {0}, {1}, {2}".format(
             int(time.time()), 
             str(random.getrandbits(32)), 
             self.keyname)
-        sign_string = "%s\nx-akamai-acs-action:%s\n" % (path, acs_action)
+        sign_string = "{0}\nx-akamai-acs-action:{1}\n".format(path, acs_action)
         message = acs_auth_data + sign_string
         if sys.version_info[0] >= 3:
             hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
@@ -63,7 +63,7 @@ class Netstorage:
             
         acs_auth_sign = base64.b64encode(hash_)
         
-        request_url = "http://%s%s" % (self.hostname, path)
+        request_url = "http://{0}{1}".format(self.hostname, path)
         
         headers = { 'X-Akamai-ACS-Action': acs_action,
                     'X-Akamai-ACS-Auth-Data': acs_auth_data,
@@ -99,7 +99,7 @@ class Netstorage:
         if path and not destination:
             destination = file_name
         elif path and not ntpath.basename(destination): 
-            destination = "%s" % (destination, file_name)
+            destination = "{0}{1}".format(destination, file_name)
             
         return self._request(action='download', 
                             method='GET',
@@ -127,7 +127,7 @@ class Netstorage:
                             path=path)
 
     def mtime(self, path, mtime):
-        return self._request(action='mtime&format=xml&mtime=%s' % (mtime),
+        return self._request(action='mtime&format=xml&mtime={0}'.format(mtime),
                             method='POST', 
                             path=path)
 
@@ -142,23 +142,23 @@ class Netstorage:
                             path=path)
 
     def rename(self, source, destination):
-        return self._request(action='rename&destination=%s' % (quote_plus(destination)),
+        return self._request(action='rename&destination={0}'.format(quote_plus(destination)),
                             method='POST',
                             path=source)
 
     def symlink(self, target, destination):
-        return self._request(action='symlink&target=%s' % (quote_plus(target)),
+        return self._request(action='symlink&target={0}'.format(quote_plus(target)),
                             method='POST',
                             path=destination)
     
     def upload(self, source, destination):
         if source and not ntpath.basename(destination):
-            destination = "%s" % (destination, ntpath.basename(source))
+            destination = "{0}{1}".format(destination, ntpath.basename(source))
 
         data = self._upload_data_to_request(source)
         f_size = len(data)
         sha256_ = sha256(data).hexdigest()
-        return self._request(action='upload&size=%s&sha256=%s' % (f_size, sha256_),
+        return self._request(action='upload&size={0}&sha256={1}'.format(f_size, sha256_),
                             method='PUT',
                             size=f_size,
                             data=data,
