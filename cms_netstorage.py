@@ -29,6 +29,8 @@ class NetstorageParser(optparse.OptionParser):
 
 
 def print_result(response):
+    print("=== Request Header ===")
+    print(response.request.headers)
     print("=== Response Code ===")
     print(response.status_code)
     print("=== Response Header ===")
