@@ -40,7 +40,7 @@ Example
     <Response [200]> # Response object from requests.get|post|put
     >>> response.status_code
     200
-    >>> response.text
+    >>> response.content # response.content.decode() for python3
     '<HTML>Request Processed</HTML>\n'
     >>>
     >>> response.encoding 

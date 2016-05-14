@@ -18,7 +18,7 @@
 # limitations under the License.
 
 
-import optparse
+import optparse, sys
 
 from akamai.netstorageapi import Netstorage
 
@@ -36,7 +36,11 @@ def print_result(response):
     print("=== Response Header ===")
     print(response.headers)
     print("=== Response Content ===")
-    print(response.text)
+    if sys.version_info[0] >= 3:
+        print(response.content.decode()) 
+    else:
+        print(response.content)
+    
 
 
 if __name__ == '__main__':
