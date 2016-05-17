@@ -13,8 +13,8 @@ setup (
     version = '1.1.1',
     description = 'Akamai Netstorage API for Python',
     long_description = readme,
-    packages=['akamai'],
-    package_dir={'akamai': 'akamai'},
+    packages = ['akamai'],
+    package_dir = {'akamai': 'akamai'},
     install_requires = [
         'requests'
     ],
