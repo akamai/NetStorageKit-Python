@@ -76,7 +76,7 @@ Methods
 Test
 ----
 
-You can test all above methods with `unittest script <https://github.com/AstinCHOI/netstorage-python/blob/master/test_netstorage.py>`_
+You can test all above methods with `unittest script <https://github.com/AstinCHOI/NetStorageKit-Python/blob/master/test_netstorage.py>`_
 (NOTE: You should input NS_HOSTNAME, NS_KEYNAME, NS_KEY and NS_CPCODE in the script):
 
 .. code-block:: bash
@@ -106,7 +106,7 @@ You can test all above methods with `unittest script <https://github.com/AstinCH
 Command
 -------
 
-You can run the `script <https://github.com/AstinCHOI/netstorage-python/blob/master/cms_netstorage.py>`_ with command line parameters.
+You can run the `script <https://github.com/AstinCHOI/NetStorageKit-Python/blob/master/cms_netstorage.py>`_ with command line parameters.
 
 .. code-block:: bash
 
