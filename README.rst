@@ -1,17 +1,17 @@
-NetStorageKit-Python: Akamai Netstorage API for Python
+NetStorageKit-Python: Akamai Netstorage API
 ===============================================
 
 .. image:: https://img.shields.io/pypi/v/netstorageapi.svg
     :target: https://pypi.python.org/pypi/netstorageapi
 
-NetStorageKit is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
+NetStorageKit-Python is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
 NetStorageKit supports Python 2.6 — 3.5, and runs great on PyPy as `requests <http://docs.python-requests.org>`_.
 
 
 Installation
 ------------
 
-To install Netstorage API:  
+To install Netstorage API for Python:  
 
 .. code-block:: bash
 
