@@ -1,11 +1,11 @@
-NetStorageKit-Python: Akamai Netstorage API
+NetstorageAPI: Akamai Netstorage API for Python
 ===============================================
 
 .. image:: https://img.shields.io/pypi/v/netstorageapi.svg
     :target: https://pypi.python.org/pypi/netstorageapi
 
-NetStorageKit-Python is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
-NetStorageKit supports Python 2.6 — 3.5, and runs great on PyPy as `requests <http://docs.python-requests.org>`_.
+NetstorageAPI is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
+NetstorageAPI supports Python 2.6 — 3.5, and runs great on PyPy as `requests <http://docs.python-requests.org>`_.
 
 
 Installation
@@ -113,3 +113,26 @@ You can run the `script <https://github.com/AstinCHOI/NetStorageKit-Python/blob/
     $ python cms_netstorage.py -H astin-nsu.akamaihd.net -k astinastin -K xxxxxxxxxx -a dir /360949
     
 Use -h or --help option for more detail.
+
+
+Author
+------
+
+Astin Choi (achoi@akamai.com)  
+
+
+License
+-------
+
+Copyright 2016 Akamai Technologies, Inc.  All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at `<http://www.apache.org/licenses/LICENSE-2.0>`_.
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
