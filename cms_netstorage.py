@@ -37,7 +37,10 @@ def print_result(response):
     print(response.headers)
     print("=== Response Content ===")
     if sys.version_info[0] >= 3:
-        print(response.content.decode()) 
+        try:
+            print(response.content.decode('ISO-8859-1'))
+        except UnicodeDecodeError:
+            print(response.content.decode('UTF-8'))
     else:
         print(response.content)
     
