@@ -28,22 +28,22 @@ class NetstorageParser(optparse.OptionParser):
         return self.epilog
 
 
-def print_result(response):
+def print_result(response, action):
     print("=== Request Header ===")
     print(response.request.headers)
     print("=== Response Code ===")
     print(response.status_code)
     print("=== Response Header ===")
     print(response.headers)
-    print("=== Response Content ===")
-    if sys.version_info[0] >= 3:
-        try:
-            print(response.content.decode('ISO-8859-1'))
-        except UnicodeDecodeError:
-            print(response.content.decode('UTF-8'))
-    else:
-        print(response.content)
-    
+    if action != 'download':
+        print("=== Response Content ===")
+        if sys.version_info[0] >= 3:
+            try:
+                print(response.content.decode('UTF-8'))
+            except UnicodeDecodeError:
+                print(response.content.decode('ISO-8859-1'))
+        else:
+            print(response.content)
 
 
 if __name__ == '__main__':
@@ -62,6 +62,8 @@ if __name__ == '__main__':
             download /123456/file.txt LOCAL_PATH
          mtime: to set the timestamp of /123456/file.txt to 1463042904 in epoch format)
             mtime /123456/file.txt 1463042904
+         quick-delete: to delete /123456/dir1 recursively (quick-delete needs to be enabled on the CP Code):
+            quick-delete /123456/dir1
          rename: to rename /123456/file.txt to /123456/newfile.txt
             rename /123456/file.txt /123456/newfile.txt
          symlink: to create a symlink /123456/file.txt_symlink pointing to /123456/file.txt
@@ -109,6 +111,8 @@ if __name__ == '__main__':
                 ok, res = ns.mkdir(args[0])
             elif options.action == 'mtime':
                 ok, res = ns.mtime(args[0], args[1])
+            elif options.action == 'quick-delete':
+                ok, res = ns.quick_delete(args[0])
             elif options.action == 'rmdir':
                 ok, res = ns.rmdir(args[0])
             elif options.action == 'stat':
@@ -120,13 +124,13 @@ if __name__ == '__main__':
             else:
                 print("Invalid action.\nUse option -h or --help")
                 exit()
-
-            print_result(res)
+            
+            print_result(res, options.action)
                 
         except IndexError as e:
             if options.action == 'download' and args[0]:
                 ok, res = ns.download(args[0])
-                print_result(res)
+                print_result(res, options.action)
             else:
                 print("Invalid argument.\nUse option -h or --help")
     else:

@@ -80,9 +80,9 @@ class Netstorage:
             headers['Accept-Encoding'] = 'identity'
             response = requests.post(request_url, headers=headers)
 
-        elif kwargs['method'] == 'PUT':
-            mmapped_data = kwargs['data']
-            headers['Content-Length'] = kwargs['size']
+        elif kwargs['method'] == 'PUT': # Use only upload
+            mmapped_data = self._upload_data_to_request(kwargs['source'])
+            headers['Content-Length'] = len(mmapped_data)
             headers['Accept-Encoding'] = 'identity'
             response = requests.put(request_url, headers=headers, data=mmapped_data)
             mmapped_data.close()
@@ -155,11 +155,7 @@ class Netstorage:
         if source and not ntpath.basename(destination):
             destination = "{0}{1}".format(destination, ntpath.basename(source))
 
-        data = self._upload_data_to_request(source)
-        f_size = len(data)
-        sha256_ = sha256(data).hexdigest()
-        return self._request(action='upload&size={0}&sha256={1}'.format(f_size, sha256_),
+        return self._request(action='upload',
                             method='PUT',
-                            size=f_size,
-                            data=data,
+                            source=source,
                             path=destination)
