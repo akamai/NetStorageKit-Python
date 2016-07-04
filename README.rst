@@ -60,7 +60,8 @@ Methods
     >>> ns.list(NETSTORAGE_PATH)
     >>> ns.mkdir(NETSTORAGE_PATH + DIRECTORY_NAME)
     >>> ns.mtime(NETSTORAGE_PATH, TIME) # ex) TIME: int(time.time())
-    >>> ns.rmdir(NETSTORAGE_PATH)
+    >>> ns.quick_delete(NETSTORAGE_DIR) # needs to be enabled on the CP Code
+    >>> ns.rmdir(NETSTORAGE_DIR)
     >>> ns.stat(NETSTORAGE_PATH)
     >>> ns.symlink(NETSTORAGE_SOURCE, NETSTORAGE_TARGET)
     >>> ns.upload(LOCAL_SOURCE, NETSTORAGE_DESTINATION)
