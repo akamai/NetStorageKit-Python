@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 with open('README.rst', 'r') as f:
@@ -8,11 +8,11 @@ with open('README.rst', 'r') as f:
 
 setup (
     name = 'netstorageapi',
-    version = '1.1.5',
+    version = '1.1.6',
     description = 'Akamai Netstorage API for Python',
     long_description = readme,
-    packages = ['akamai'],
-    package_dir = {'akamai': 'akamai'},
+    namespace_packages=['akamai'],
+    packages=find_packages(),
     install_requires = [
         'requests'
     ],
