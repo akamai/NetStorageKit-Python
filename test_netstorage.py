@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 # Original author: Astin Choi <achoi@akamai.com>
 
 # Copyright 2016 Akamai Technologies http://developer.akamai.com.
