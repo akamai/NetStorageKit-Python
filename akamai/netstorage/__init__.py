@@ -3,4 +3,4 @@
 from .netstorage import Netstorage
 
 
-__all__=['Netstorage']
+__all__ = ['Netstorage']
