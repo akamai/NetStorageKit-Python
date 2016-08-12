@@ -20,7 +20,7 @@
 
 import optparse, sys
 
-from akamai.netstorageapi import Netstorage
+from akamai.netstorage import Netstorage
 
 
 class NetstorageParser(optparse.OptionParser):
@@ -37,18 +37,12 @@ def print_result(response, action):
     print(response.headers)
     if action != 'download':
         print("=== Response Content ===")
-        if sys.version_info[0] >= 3:
-            try:
-                print(response.content.decode('UTF-8'))
-            except UnicodeDecodeError:
-                print(response.content.decode('ISO-8859-1'))
-        else:
-            print(response.content)
+        print(response.text)
 
 
 if __name__ == '__main__':
-    action_list = \
-    '''         dir: to list the contents of the directory /123456
+    action_list = '''\
+         dir: to list the contents of the directory /123456
             dir /123456
          upload: to upload file.txt to /123456 directory
             upload file.txt /123456/ or
@@ -74,9 +68,9 @@ if __name__ == '__main__':
             mkdir /123456/dir1
          rmdir: to delete /123456/dir1 (directory needs to be empty)
             rmdir /123456/dir1
-    '''
-
-    parser = NetstorageParser(epilog=action_list)
+'''
+    usage = 'Usage: python cms_netstorage.py -H [hostname] -k [keyname] -K [key] -action [action_options] ..'
+    parser = NetstorageParser(usage=usage, epilog=action_list)
 
     parser.add_option(
         '-H', '--host', dest='hostname',
@@ -92,7 +86,7 @@ if __name__ == '__main__':
 
     (options, args) = parser.parse_args()
 
-    if options.hostname and options.keyname and options.key:
+    if options.hostname and options.keyname and options.key and options.action:
         ns = Netstorage(options.hostname, options.keyname, options.key)
 
         try:
@@ -105,8 +99,6 @@ if __name__ == '__main__':
                 ok, res = ns.download(args[0], args[1])
             elif options.action == 'du':
                 ok, res = ns.du(args[0])
-            elif options.action == 'list':
-                ok, res = ns.list(args[0])
             elif options.action == 'mkdir':
                 ok, res = ns.mkdir(args[0])
             elif options.action == 'mtime':
@@ -132,6 +124,8 @@ if __name__ == '__main__':
                 ok, res = ns.download(args[0])
                 print_result(res, options.action)
             else:
-                print("Invalid argument.\nUse option -h or --help")
+                print("Invalid argument.\n")
+                parser.print_help()
     else:
-        print("You should input hostname, keyname and key.\nUse option -h or --help")
+        print("You should input hostname, keyname, key and action.\n")
+        parser.print_help()

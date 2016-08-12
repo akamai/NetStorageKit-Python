@@ -34,9 +34,16 @@ class Netstorage:
         self.keyname = keyname
         self.key = key
         
-    def _download_data_from_response(self, response, destination, chunk_size=16*1024):
-        if destination and response.status_code == 200:
-            with open(destination, 'wb') as f:
+    def _download_data_from_response(self, response, ns_path, local_destination, chunk_size=16*1024):
+        file_name = ntpath.basename(ns_path)
+
+        if not local_destination:
+            local_destination = file_name
+        elif not ntpath.basename(local_destination):
+            local_destination = "{0}{1}".format(local_destination, file_name)
+
+        if local_destination and response.status_code == 200:
+            with open(local_destination, 'wb') as f:
                 for chunk in response.iter_content(chunk_size):
                     f.write(chunk)
                     f.flush()
@@ -48,7 +55,11 @@ class Netstorage:
         return mmapped_data
 
     def _request(self, **kwargs):
-        path = quote(kwargs['path'])
+        path = kwargs['path']
+        if not path:
+            return False, "There is no netstorage path."
+
+        path = quote(path)
         acs_action = "version=1&action={0}".format(kwargs['action'])
         acs_auth_data = "5, 0.0.0.0, 0.0.0.0, {0}, {1}, {2}".format(
             int(time.time()), 
@@ -67,95 +78,87 @@ class Netstorage:
         
         headers = { 'X-Akamai-ACS-Action': acs_action,
                     'X-Akamai-ACS-Auth-Data': acs_auth_data,
-                    'X-Akamai-ACS-Auth-Sign': acs_auth_sign }
+                    'X-Akamai-ACS-Auth-Sign': acs_auth_sign,
+                    'Accept-Encoding': 'identity'
+        }
         
         response = None
         if kwargs['method'] == 'GET':
             response = requests.get(request_url, headers=headers)
             if kwargs['action'] == 'download':
-                self._download_data_from_response(response, kwargs['destination'])
+                self._download_data_from_response(response, kwargs['path'], kwargs['destination'])
 
         elif kwargs['method'] == 'POST':
-            headers['Content-Length'] = 0
-            headers['Accept-Encoding'] = 'identity'
             response = requests.post(request_url, headers=headers)
 
         elif kwargs['method'] == 'PUT': # Use only upload
             mmapped_data = self._upload_data_to_request(kwargs['source'])
-            headers['Content-Length'] = len(mmapped_data)
-            headers['Accept-Encoding'] = 'identity'
             response = requests.put(request_url, headers=headers, data=mmapped_data)
             mmapped_data.close()
             
         return response.status_code == 200, response
 
-    def dir(self, path):
+    def dir(self, ns_path):
         return self._request(action='dir&format=xml', 
                             method='GET', 
-                            path=path)
+                            path=ns_path)
 
-    def download(self, path, destination=''):
-        file_name = ntpath.basename(path)
-        if path and not destination:
-            destination = file_name
-        elif path and not ntpath.basename(destination): 
-            destination = "{0}{1}".format(destination, file_name)
-            
+    def download(self, ns_path, local_destination=''):
         return self._request(action='download', 
                             method='GET',
-                            path=path,
-                            destination=destination)
+                            path=ns_path,
+                            destination=local_destination)
 
-    def du(self, path):
+    def du(self, ns_path):
         return self._request(action='du&format=xml',
                             method='GET', 
-                            path=path)
+                            path=ns_path)
 
-    def stat(self, path):
+    def stat(self, ns_path):
         return self._request(action='stat&format=xml',
                             method='GET',
-                            path=path)
+                            path=ns_path)
 
-    def mkdir(self, path):
+    def mkdir(self, ns_path):
         return self._request(action='mkdir',
                             method='POST', 
-                            path=path)
+                            path=ns_path)
 
-    def rmdir(self, path):
+    def rmdir(self, ns_path):
         return self._request(action='rmdir',
                             method='POST',
-                            path=path)
+                            path=ns_path)
 
-    def mtime(self, path, mtime):
+    def mtime(self, ns_path, mtime):
         return self._request(action='mtime&format=xml&mtime={0}'.format(mtime),
                             method='POST', 
-                            path=path)
+                            path=ns_path)
 
-    def delete(self, path):
+    def delete(self, ns_path):
         return self._request(action='delete',
                             method='POST', 
-                            path=path)
+                            path=ns_path)
 
-    def quick_delete(self, path):
+    def quick_delete(self, ns_path):
         return self._request(action='quick-delete&quick-delete=imreallyreallysure',
                             method='POST', 
-                            path=path)
+                            path=ns_path)
 
-    def rename(self, source, destination):
-        return self._request(action='rename&destination={0}'.format(quote_plus(destination)),
+    def rename(self, ns_target, ns_destination):
+        return self._request(action='rename&destination={0}'.format(quote_plus(ns_destination)),
                             method='POST',
-                            path=source)
+                            path=ns_target)
 
-    def symlink(self, target, destination):
-        return self._request(action='symlink&target={0}'.format(quote_plus(target)),
+    def symlink(self, ns_target, ns_destination):
+        return self._request(action='symlink&target={0}'.format(quote_plus(ns_target)),
                             method='POST',
-                            path=destination)
+                            path=ns_destination)
     
-    def upload(self, source, destination):
-        if source and not ntpath.basename(destination):
-            destination = "{0}{1}".format(destination, ntpath.basename(source))
+    def upload(self, local_source, ns_destination):
+        if local_source and not ntpath.basename(ns_destination):
+            ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
 
         return self._request(action='upload',
                             method='PUT',
-                            source=source,
-                            path=destination)
+                            source=local_source,
+                            path=ns_destination)

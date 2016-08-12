@@ -23,7 +23,7 @@ Example
 
 .. code-block:: python
 
-    >>> from akamai.netstorageapi import Netstorage
+    >>> from akamai.netstorage import Netstorage
     >>>
     >>> NS_HOSTNAME = 'astin-nsu.akamaihd.net'
     >>> NS_KEYNAME = 'astinastin'
@@ -40,8 +40,8 @@ Example
     <Response [200]> # Response object from requests.get|post|put
     >>> response.status_code
     200
-    >>> response.content # response.content.decode() for python3
-    '<HTML>Request Processed</HTML>\n'
+    >>> response.text
+    '<HTML>Request Processed</HTML>'
     >>>
     >>> response.encoding 
     'ISO-8859-1' # requests makes educated guesses about the encoding of the response based on the HTTP headers.
@@ -61,9 +61,10 @@ Methods
     >>> ns.mkdir(NETSTORAGE_PATH + DIRECTORY_NAME)
     >>> ns.mtime(NETSTORAGE_PATH, TIME) # ex) TIME: int(time.time())
     >>> ns.quick_delete(NETSTORAGE_DIR) # needs to be enabled on the CP Code
+    >>> ns.rename(NETSTORAGE_TARGET, NETSTORAGE_DESTINATION)
     >>> ns.rmdir(NETSTORAGE_DIR)
     >>> ns.stat(NETSTORAGE_PATH)
-    >>> ns.symlink(NETSTORAGE_SOURCE, NETSTORAGE_TARGET)
+    >>> ns.symlink(NETSTORAGE_TARGET, NETSTORAGE_DESTINATION)
     >>> ns.upload(LOCAL_SOURCE, NETSTORAGE_DESTINATION)
     >>>
     >>>
@@ -136,4 +137,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-

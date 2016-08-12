@@ -21,7 +21,7 @@
 import unittest, uuid, os, time
 import xml.etree.ElementTree as ET
 
-from akamai.netstorageapi import Netstorage
+from akamai.netstorage import Netstorage
 
 
 NS_HOSTNAME = "astin-nsu.akamaihd.net"
@@ -79,7 +79,7 @@ class TestNetstorage(unittest.TestCase):
         # upload
         with open(self.temp_file, 'wt') as f:
             f.write("Hello, Netstorage API World!")
-        ok, _ = self.ns.upload(self.temp_file, self.temp_ns_file)
+        ok, res = self.ns.upload(self.temp_file, self.temp_ns_file)
         self.assertEqual(True, ok, "upload fail.")
         print("[TEST] upload {0} to {1} done".format(self.temp_file, self.temp_ns_file))
 
