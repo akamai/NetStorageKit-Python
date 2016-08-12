@@ -1,1 +1,1 @@
-include README.rst requirements.txt setup.py test_netstorage.py
+include README.rst requirements.txt setup.py
