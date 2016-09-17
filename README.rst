@@ -30,7 +30,7 @@ Example
     >>> NS_KEY = 'xxxxxxxxxx' # Don't expose NS_KEY on public repository.
     >>> NS_CPCODE = '360949'
     >>>
-    >>> ns = Netstorage(NS_HOSTNAME, NS_KEYNAME, NS_KEY)
+    >>> ns = Netstorage(NS_HOSTNAME, NS_KEYNAME, NS_KEY, ssl=False) # ssl is optional (default: False)
     >>> local_source = 'hello.txt'
     >>> netstorage_destination = '/{0}/hello.txt'.format(NS_CPCODE) # or '/{0}/'.format(NS_CPCODE) is same.
     >>> ok, response = ns.upload(local_source, netstorage_destination)
