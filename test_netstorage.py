@@ -20,7 +20,7 @@
 import unittest, uuid, os, time
 import xml.etree.ElementTree as ET
 
-from akamai.netstorage import Netstorage
+from akamai.netstorage import Netstorage, NetstorageError
 
 
 NS_HOSTNAME = "astin-nsu.akamaihd.net"
@@ -129,6 +129,19 @@ class TestNetstorage(unittest.TestCase):
         ok, _ = self.ns.rmdir(self.temp_ns_dir)
         self.assertEqual(True, ok, "rmdir fail.")
         print("[TEST] rmdir {0} done".format(self.temp_ns_dir))
+
+
+    def test_netstorage_exception(self):
+        print(os.linesep)
+        
+        with self.assertRaises(NetstorageError):
+            self.ns.dir("Invalid ns path")
+        print("[TEST] Invalid ns path NetstorageError test done")
+
+        with self.assertRaises(NetstorageError):
+            self.ns.upload("Invalid local path", self.temp_ns_file)
+        print("[TEST] Invalid local path NetstorageError test done")
+        
 
 
 if __name__ == '__main__':

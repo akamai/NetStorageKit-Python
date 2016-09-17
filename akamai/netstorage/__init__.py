@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .netstorage import Netstorage
+from .netstorage import Netstorage, NetstorageError
 
 
-__all__ = ['Netstorage']
+__all__ = ['Netstorage', 'NetstorageError']

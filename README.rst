@@ -23,7 +23,7 @@ Example
 
 .. code-block:: python
 
-    >>> from akamai.netstorage import Netstorage
+    >>> from akamai.netstorage import Netstorage, NetstorageError
     >>>
     >>> NS_HOSTNAME = 'astin-nsu.akamaihd.net'
     >>> NS_KEYNAME = 'astinastin'
@@ -70,8 +70,8 @@ Methods
     >>>
     >>> # INFO: Return (True/False, Response Object from requests.get|post|put)
     >>> #       True means 200 OK.
-    >>> # INFO: Can "upload" Only a single file, not directory.
-    >>> # WARN: Can raise FILE related error in "download" and "upload".
+    >>> # INFO: Can "upload" Only a single file, not a directory.
+    >>> # WARN: Can raise NetstorageError at all methods.
     >>>
 
 
@@ -99,9 +99,13 @@ You can test all above methods with `unittest script <https://github.com/AstinCH
     [TEARDOWN] remove 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt from local done
     [TEARDOWN] remove 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_rename from local done
     .
-    ----------------------------------------------------------------------
-    Ran 1 test in 3.705s
 
+    [TEST] Invalid ns path NetstorageError test done
+    [TEST] Invalid local path NetstorageError test done
+    .
+    ----------------------------------------------------------------------
+    Ran 2 tests in x.xxxs
+    
     OK
 
 

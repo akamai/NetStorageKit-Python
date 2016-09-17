@@ -18,7 +18,7 @@
 
 
 from hashlib import sha256
-import base64, hmac, mmap, ntpath, random, sys, time
+import base64, hmac, mmap, ntpath, os, random, sys, time
 if sys.version_info[0] >= 3:
     from urllib.parse import quote_plus, quote # python3
 else:
@@ -27,11 +27,20 @@ else:
 import requests
 
 
-class Netstorage:    
-    def __init__(self, hostname, keyname, key):
+class NetstorageError(Exception):
+    """Base-class for all exceptions raised by Netstorage Class"""
+
+
+class Netstorage:
+    def __init__(self, hostname, keyname, key, ssl=False):
+        if not (hostname and keyname and key):
+            raise NetstorageError('[NetstorageError] You should input netstorage hostname, keyname and key all')
+
         self.hostname = hostname
         self.keyname = keyname
         self.key = key
+        self.ssl = 's' if ssl else ''
+        
         
     def _download_data_from_response(self, response, ns_path, local_destination, chunk_size=16*1024):
         file_name = ntpath.basename(ns_path)
@@ -42,21 +51,29 @@ class Netstorage:
             local_destination = "{0}{1}".format(local_destination, file_name)
 
         if local_destination and response.status_code == 200:
-            with open(local_destination, 'wb') as f:
-                for chunk in response.iter_content(chunk_size):
-                    f.write(chunk)
-                    f.flush()
+            try:
+                with open(local_destination, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size):
+                        f.write(chunk)
+                        f.flush()
+            except Exception as e:
+                raise NetstorageError(e)
     
     def _upload_data_to_request(self, source):
-        with open(source, 'rb') as f:
-            mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-
+        mmapped_data = None
+        try:
+            with open(source, 'rb') as f:
+                mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+        except Exception as e:
+            if mmapped_data: mmapped_data.close()
+            raise NetstorageError(e)
+        
         return mmapped_data
 
     def _request(self, **kwargs):
         path = kwargs['path']
-        if not path:
-            return False, "There is no netstorage path."
+        if not path.startswith('/'):
+            raise NetstorageError('[NetstorageError] Invalid netstorage path')
 
         path = quote(path)
         acs_action = "version=1&action={0}".format(kwargs['action'])
@@ -73,7 +90,7 @@ class Netstorage:
             
         acs_auth_sign = base64.b64encode(hash_)
         
-        request_url = "http://{0}{1}".format(self.hostname, path)
+        request_url = "http{0}://{1}{2}".format(self.ssl, self.hostname, path)
         
         headers = { 'X-Akamai-ACS-Action': acs_action,
                     'X-Akamai-ACS-Auth-Data': acs_auth_data,
@@ -154,8 +171,12 @@ class Netstorage:
                             path=ns_destination)
     
     def upload(self, local_source, ns_destination):
-        if local_source and not ntpath.basename(ns_destination):
-            ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
+        if not os.path.exists(local_source):
+          raise NetstorageError("[NetstorageError] {0} doesn't exist".format(local_source))
+        elif os.path.isdir(local_source):
+          raise NetstorageError('[NetstorageError] You should upload a file, not a directory')
+        elif not ntpath.basename(ns_destination):
+          ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
 
         return self._request(action='upload',
                             method='PUT',
