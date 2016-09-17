@@ -130,10 +130,9 @@ class TestNetstorage(unittest.TestCase):
         self.assertEqual(True, ok, "rmdir fail.")
         print("[TEST] rmdir {0} done".format(self.temp_ns_dir))
 
-
     def test_netstorage_exception(self):
         print(os.linesep)
-        
+
         with self.assertRaises(NetstorageError):
             self.ns.dir("Invalid ns path")
         print("[TEST] Invalid ns path NetstorageError test done")
