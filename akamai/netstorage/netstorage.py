@@ -171,12 +171,11 @@ class Netstorage:
                             path=ns_destination)
     
     def upload(self, local_source, ns_destination):
-        if not os.path.exists(local_source):
-          raise NetstorageError("[NetstorageError] {0} doesn't exist".format(local_source))
-        elif os.path.isdir(local_source):
-          raise NetstorageError('[NetstorageError] You should upload a file, not a directory')
-        elif not ntpath.basename(ns_destination):
-          ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
+        if os.path.isfile(local_source):
+            if ns_destination[-1] == '/':
+                ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
+        else:
+          raise NetstorageError("[NetstorageError] {0} doesn't exist or is directory".format(local_source))  
 
         return self._request(action='upload',
                             method='PUT',
