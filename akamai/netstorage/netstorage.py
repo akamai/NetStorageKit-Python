@@ -47,10 +47,10 @@ class Netstorage:
 
         if not local_destination:
             local_destination = file_name
-        elif not ntpath.basename(local_destination):
-            local_destination = "{0}{1}".format(local_destination, file_name)
+        elif os.path.isdir(local_destination):
+            local_destination = os.path.join(local_destination, file_name) 
 
-        if local_destination and response.status_code == 200:
+        if response.status_code == 200:
             try:
                 with open(local_destination, 'wb') as f:
                     for chunk in response.iter_content(chunk_size):
