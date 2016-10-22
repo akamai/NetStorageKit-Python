@@ -102,6 +102,7 @@ You can test all above methods with `unittest script <https://github.com/AstinCH
 
     [TEST] Invalid ns path NetstorageError test done
     [TEST] Invalid local path NetstorageError test done
+    [TEST] Download directory path NetstorageError test done
     .
     ----------------------------------------------------------------------
     Ran 2 tests in x.xxxs

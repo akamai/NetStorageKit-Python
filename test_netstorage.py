@@ -140,7 +140,10 @@ class TestNetstorage(unittest.TestCase):
         with self.assertRaises(NetstorageError):
             self.ns.upload("Invalid local path", self.temp_ns_file)
         print("[TEST] Invalid local path NetstorageError test done")
-        
+
+        with self.assertRaises(NetstorageError):
+            self.ns.download("/123456/directory/", self.temp_file)
+        print("[TEST] Download directory path NetstorageError test done")
 
 
 if __name__ == '__main__':

@@ -43,12 +43,10 @@ class Netstorage:
         
         
     def _download_data_from_response(self, response, ns_path, local_destination, chunk_size=16*1024):
-        file_name = ntpath.basename(ns_path)
-
         if not local_destination:
-            local_destination = file_name
+            local_destination = ntpath.basename(ns_path)
         elif os.path.isdir(local_destination):
-            local_destination = os.path.join(local_destination, file_name) 
+            local_destination = os.path.join(local_destination, ntpath.basename(ns_path)) 
 
         if response.status_code == 200:
             try:
@@ -119,10 +117,12 @@ class Netstorage:
                             method='GET', 
                             path=ns_path)
 
-    def download(self, ns_path, local_destination=''):
+    def download(self, ns_source, local_destination=''):
+        if ns_source.endswith('/'):
+            raise NetstorageError("[NetstorageError] Nestorage download path shouldn't be a directory: {0}".format(ns_source))
         return self._request(action='download', 
                             method='GET',
-                            path=ns_path,
+                            path=ns_source,
                             destination=local_destination)
 
     def du(self, ns_path):
