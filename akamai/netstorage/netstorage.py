@@ -90,10 +90,12 @@ class Netstorage:
         
         request_url = "http{0}://{1}{2}".format(self.ssl, self.hostname, path)
         
-        headers = { 'X-Akamai-ACS-Action': acs_action,
-                    'X-Akamai-ACS-Auth-Data': acs_auth_data,
-                    'X-Akamai-ACS-Auth-Sign': acs_auth_sign,
-                    'Accept-Encoding': 'identity'
+        headers = { 
+            'X-Akamai-ACS-Action': acs_action,
+            'X-Akamai-ACS-Auth-Data': acs_auth_data,
+            'X-Akamai-ACS-Auth-Sign': acs_auth_sign,
+            'Accept-Encoding': 'identity',
+            'User-Agent': 'NetStorageKit-Python'
         }
         
         response = None
@@ -172,7 +174,7 @@ class Netstorage:
     
     def upload(self, local_source, ns_destination):
         if os.path.isfile(local_source):
-            if ns_destination[-1] == '/':
+            if ns_destination.endswith('/'):
                 ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
         else:
           raise NetstorageError("[NetstorageError] {0} doesn't exist or is directory".format(local_source))  
