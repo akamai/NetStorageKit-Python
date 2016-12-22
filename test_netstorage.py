@@ -24,9 +24,10 @@ from akamai.netstorage import Netstorage, NetstorageError
 
 
 NS_HOSTNAME = "astin-nsu.akamaihd.net"
-NS_KEYNAME = "astinastin"
-from spike import secrets 
-NS_KEY = secrets.key # DO NOT EXPOSE IT
+NS_KEYNAME = "astinapi"
+# from spike import secrets 
+# NS_KEY = secrets.key # DO NOT EXPOSE IT
+NS_KEY = os.environ['NS_KEY']
 NS_CPCODE = "360949"
 
 
