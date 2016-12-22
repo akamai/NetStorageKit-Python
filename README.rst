@@ -4,6 +4,13 @@ NetstorageAPI: Akamai Netstorage API for Python
 .. image:: https://img.shields.io/pypi/v/netstorageapi.svg
     :target: https://pypi.python.org/pypi/netstorageapi
 
+.. image:: https://travis-ci.org/akamai-open/NetStorageKit-Python.svg?branch=master
+    :target: https://travis-ci.org/akamai-open/NetStorageKit-Python
+
+.. image:: http://img.shields.io/:license-apache-blue.svg 
+    :target: https://github.com/akamai-open/NetStorageKit-Python/blob/master/LICENSE
+
+
 NetstorageAPI is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
 NetstorageAPI supports Python 2.6 — 3.5, and runs great on PyPy as `requests <http://docs.python-requests.org>`_.
 
@@ -26,7 +33,7 @@ Example
     >>> from akamai.netstorage import Netstorage, NetstorageError
     >>>
     >>> NS_HOSTNAME = 'astin-nsu.akamaihd.net'
-    >>> NS_KEYNAME = 'astinastin'
+    >>> NS_KEYNAME = 'astinapi'
     >>> NS_KEY = 'xxxxxxxxxx' # Don't expose NS_KEY on public repository.
     >>> NS_CPCODE = '360949'
     >>>

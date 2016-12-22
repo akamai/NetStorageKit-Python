@@ -1,14 +1,22 @@
 language: python
 python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
   - "3.5"
+  - "pypy"  
+  - "pypy3" 
 
 env:
   global:
     - secure: CU6wrK3/WuTT04eulLLrYDqVYQZEMi0KpQZQ1/+4z1k7m1+LIP5TWLNg4258Vr7bxouRJxEEGWq2cobN7cSAYshIwGWCFWoVAcf6DbVEJSsit8E93hWMrthNqU45cMlSY35lXKUfCJ6MntRWi/++UeoFAFXGsAOXDJmFTCEtq8v81d2Rw09oZLavTHxas0WCnGc+5ioAx2vld+Leknh0dNIKpGo5D+OTaT7PZEx9Y8JtwNhl1rhCCznhAFAftKBIJVOh8Yeorm58FgIcW9fk/QHZMeoQ7QaCxSWwWr1cRdMNBLAd4yjDMLF9AQc0FYqsRyArpsVk7LCbUhzOdce8NNkGUcRukaRWOq3dwKI7C7oN4JPTaKZFDYekIAr5lbcmaTS3xFh/Yluf+HvWaXkUa5dLTZrORXjUExaW0IAbIocCpVZSASgxDgq8i1PCIQ/CN8TiCaYDKiwRdNb3EYaiqbSkcDiCe1Zj4mpQl7dilxGVF0VEjHsqyvtSxW1gBZEMtZoj5ofjQV49daWLGdedTN9l8MYvlkviyyzFbeERQKEKXhbheO130H3iErx21dKsXOlOaMiTaaV4ko2E7zWIMUs097oYMmmFswBpEmA5IhW6Mq/1a8mQfvIHUv9gBwG7K1rkxWT4e7qW0QrKD4eJLLLLtu7DCtpOfBI0L4wpNjk=
 
 install:
+  - pip install -q -U pip setuptools tox
   - pip install -r requirements.txt
 
 script:
   - export NS_KEY=$NS_KEY
-  - python test_netstorage.py 
+  - tox
