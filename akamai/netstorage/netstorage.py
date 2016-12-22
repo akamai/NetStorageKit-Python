@@ -17,8 +17,7 @@
 # limitations under the License.
 
 
-from hashlib import sha256
-import base64, hmac, mmap, ntpath, os, random, sys, time
+import base64, hashlib, hmac, mmap, ntpath, os, random, sys, time
 if sys.version_info[0] >= 3:
     from urllib.parse import quote_plus, quote # python3
 else:
@@ -81,10 +80,7 @@ class Netstorage:
             self.keyname)
         sign_string = "{0}\nx-akamai-acs-action:{1}\n".format(path, acs_action)
         message = acs_auth_data + sign_string
-        if sys.version_info[0] >= 3:
-            hash_ = hmac.new(self.key.encode(), message.encode(), "sha256").digest()
-        else:
-            hash_ = hmac.new(self.key.encode(), message.encode(), sha256).digest()
+        hash_ = hmac.new(self.key.encode(), message.encode(), hashlib.sha256).digest()
             
         acs_auth_sign = base64.b64encode(hash_)
         
