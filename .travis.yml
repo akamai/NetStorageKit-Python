@@ -5,9 +5,9 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-  - "3.6"
+  - "3.6-dev"
   - "pypy"  
-  - "pypy3" 
+  - "pypy3"
 
 env:
   global:
