@@ -59,8 +59,8 @@ class Netstorage:
             try:
                 with open(local_destination, 'wb') as f:
                     for chunk in response.iter_content(chunk_size):
-                        f.write(chunk)
-                        f.flush()
+                        if chunk:
+                            f.write(chunk)
             except Exception as e:
                 raise NetstorageError(e)
     
