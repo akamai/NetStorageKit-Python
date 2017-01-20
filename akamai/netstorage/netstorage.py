@@ -27,9 +27,9 @@ import random
 import sys
 import time
 if sys.version_info[0] >= 3:
-    from urllib.parse import quote_plus, quote # python3
+    from urllib.parse import quote_plus, quote
 else:
-    from urllib import quote_plus, quote # python2
+    from urllib import quote_plus, quote
     
 import requests
 
