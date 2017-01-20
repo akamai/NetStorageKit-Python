@@ -17,7 +17,15 @@
 # limitations under the License.
 
 
-import base64, hashlib, hmac, mmap, ntpath, os, random, sys, time
+import base64
+import hashlib
+import hmac
+import mmap
+import ntpath
+import os
+import random
+import sys
+import time
 if sys.version_info[0] >= 3:
     from urllib.parse import quote_plus, quote # python3
 else:
@@ -96,9 +104,11 @@ class Netstorage:
         
         response = None
         if kwargs['method'] == 'GET':
-            response = requests.get(request_url, headers=headers)
             if kwargs['action'] == 'download':
+                response = requests.get(request_url, headers=headers, stream=True)
                 self._download_data_from_response(response, kwargs['path'], kwargs['destination'])
+            else:
+                response = requests.get(request_url, headers=headers)
 
         elif kwargs['method'] == 'POST':
             response = requests.post(request_url, headers=headers)

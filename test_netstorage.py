@@ -17,7 +17,11 @@
 # limitations under the License.
 
 
-import unittest, uuid, os, sys, time
+import os
+import sys
+import time
+import unittest
+import uuid
 import xml.etree.ElementTree as ET
 
 from akamai.netstorage import Netstorage, NetstorageError
