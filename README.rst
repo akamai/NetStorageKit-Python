@@ -30,30 +30,21 @@ Example
 
 .. code-block:: python
 
-    >>> from akamai.netstorage import Netstorage, NetstorageError
-    >>>
-    >>> NS_HOSTNAME = 'astin-nsu.akamaihd.net'
-    >>> NS_KEYNAME = 'astinapi'
-    >>> NS_KEY = 'xxxxxxxxxx' # Don't expose NS_KEY on public repository.
-    >>> NS_CPCODE = '360949'
-    >>>
-    >>> ns = Netstorage(NS_HOSTNAME, NS_KEYNAME, NS_KEY, ssl=False) # ssl is optional (default: False)
-    >>> local_source = 'hello.txt'
-    >>> netstorage_destination = '/{0}/hello.txt'.format(NS_CPCODE) # or '/{0}/'.format(NS_CPCODE) is same.
-    >>> ok, response = ns.upload(local_source, netstorage_destination)
-    >>> ok
-    True # means 200 OK; If False, it's not 200 OK
-    >>> response
-    <Response [200]> # Response object from requests.get|post|put
-    >>> response.status_code
-    200
-    >>> response.text
-    '<HTML>Request Processed</HTML>'
-    >>>
-    >>> response.encoding 
-    'ISO-8859-1' # requests makes educated guesses about the encoding of the response based on the HTTP headers.
-    >>> response.encoding = 'utf-8' # You can change the response encoding.
-    >>>
+    from akamai.netstorage import Netstorage, NetstorageError
+    
+    NS_HOSTNAME = 'astin-nsu.akamaihd.net'
+    NS_KEYNAME = 'astinapi'
+    NS_KEY = 'xxxxxxxxxx' # Don't expose NS_KEY on public repository.
+    NS_CPCODE = '360949'
+    
+    ns = Netstorage(NS_HOSTNAME, NS_KEYNAME, NS_KEY, ssl=False) # ssl is optional (default: False)
+    local_source = 'hello.txt'
+    netstorage_destination = '/{0}/hello.txt'.format(NS_CPCODE) # or '/{0}/'.format(NS_CPCODE) is same.
+    ok, response = ns.upload(local_source, netstorage_destination)
+    # "ok": True means 200 OK; If False, it's not 200 OK
+    # "response": <Response [200]> # Response object from requests.get|post|put
+    print(response.text)
+    # '<HTML>Request Processed</HTML>'
 
 Methods
 -------
@@ -71,12 +62,14 @@ Methods
     >>> ns.rmdir(NETSTORAGE_DIR)
     >>> ns.stat(NETSTORAGE_PATH)
     >>> ns.symlink(NETSTORAGE_TARGET, NETSTORAGE_DESTINATION)
-    >>> ns.upload(LOCAL_SOURCE, NETSTORAGE_DESTINATION)
+    >>> ns.upload(LOCAL_SOURCE, NETSTORAGE_DESTINATION, INDEX_ZIP)
     >>>
     >>>
     >>> # INFO: Return (True/False, Response Object from requests.get|post|put)
     >>> #       True means 200 OK.
     >>> # INFO: Can "upload" Only a single file, not a directory.
+    >>> #       "upload" INDEX_ZIP value is are bool(True or False).
+    >>> #       (This supports only for FileStore)
     >>> # WARN: Can raise NetstorageError at all methods.
     >>>
 
@@ -84,12 +77,12 @@ Methods
 Test
 ----
 
-You can test all above methods with `unittest script <https://github.com/AstinCHOI/NetStorageKit-Python/blob/master/test_netstorage.py>`_
+You can test all above methods with `unittest script <https://github.com/AstinCHOI/NetStorageKit-Python/blob/master/test/test_netstorage.py>`_
 (NOTE: You should input NS_HOSTNAME, NS_KEYNAME, NS_KEY and NS_CPCODE in the script):
 
 .. code-block:: bash
 
-    $ python test_netstorage.py
+    $ python test/test_netstorage.py
     [TEST] dir /360949 done
     [TEST] mkdir /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9 done
     [TEST] upload 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt to /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt done

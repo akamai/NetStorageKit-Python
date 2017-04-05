@@ -24,15 +24,20 @@ import unittest
 import uuid
 import xml.etree.ElementTree as ET
 
+sys.path.append("akamai/netstorage"); sys.path.append("../akamai/netstorage")
 from akamai.netstorage import Netstorage, NetstorageError
 
-
-NS_HOSTNAME = "astin-nsu.akamaihd.net"
-NS_KEYNAME = "astinapi"
-# from spike import secrets 
-# NS_KEY = secrets.key # DO NOT EXPOSE IT
-NS_KEY = os.environ['NS_KEY']
-NS_CPCODE = "360949"
+if os.environ.get('TEST_MODE') == 'TRAVIS':
+    NS_HOSTNAME = os.environ['NS_HOSTNAME']
+    NS_KEYNAME = os.environ['NS_KEYNAME']
+    NS_KEY = os.environ['NS_KEY']
+    NS_CPCODE = os.environ['NS_CPCODE']
+else:
+    import secret
+    NS_HOSTNAME = secret.NS_HOSTNAME
+    NS_KEYNAME = secret.NS_KEYNAME
+    NS_KEY = secret.NS_KEY
+    NS_CPCODE = secret.NS_CPCODE
 
 
 class TestNetstorage(unittest.TestCase):

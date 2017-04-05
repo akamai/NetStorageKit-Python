@@ -8,11 +8,11 @@ with open('README.rst', 'r') as f:
 
 setup (
     name = 'netstorageapi',
-    version = '1.2.6',
+    version = '1.2.7',
     description = 'Akamai Netstorage API for Python',
     long_description = readme,
     namespace_packages=['akamai'],
-    packages=find_packages(exclude=['spike']),
+    packages=find_packages(exclude=['spike', 'test']),
     install_requires = [
         'requests'
     ],

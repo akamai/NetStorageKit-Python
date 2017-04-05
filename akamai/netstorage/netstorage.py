@@ -178,14 +178,19 @@ class Netstorage:
                             method='POST',
                             path=ns_destination)
     
-    def upload(self, local_source, ns_destination):
+    def upload(self, local_source, ns_destination, index_zip=False):
         if os.path.isfile(local_source):
             if ns_destination.endswith('/'):
                 ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
         else:
           raise NetstorageError("[NetstorageError] {0} doesn't exist or is directory".format(local_source))  
-
-        return self._request(action='upload',
+        
+        action = 'upload'
+        
+        if index_zip: # Support only For File Store, not Object Store.
+            action = action + '&index-zip=1'
+        
+        return self._request(action=action,
                             method='PUT',
                             source=local_source,
                             path=ns_destination)
