@@ -25,7 +25,7 @@ import uuid
 import xml.etree.ElementTree as ET
 
 sys.path.append("akamai/netstorage"); sys.path.append("../akamai/netstorage")
-from akamai.netstorage import Netstorage, NetstorageError
+from netstorage import Netstorage, NetstorageError
 
 if os.environ.get('TEST_MODE') == 'TRAVIS':
     NS_HOSTNAME = os.environ['NS_HOSTNAME']
