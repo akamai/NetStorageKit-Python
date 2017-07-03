@@ -4,11 +4,11 @@ NetstorageAPI: Akamai Netstorage API for Python
 .. image:: https://img.shields.io/pypi/v/netstorageapi.svg
     :target: https://pypi.python.org/pypi/netstorageapi
 
-.. image:: https://travis-ci.org/akamai-open/NetStorageKit-Python.svg?branch=master
-    :target: https://travis-ci.org/akamai-open/NetStorageKit-Python
+.. image:: https://travis-ci.org/akamai/NetStorageKit-Python.svg?branch=master
+    :target: https://travis-ci.org/akamai/NetStorageKit-Python
 
 .. image:: http://img.shields.io/:license-apache-blue.svg 
-    :target: https://github.com/akamai-open/NetStorageKit-Python/blob/master/LICENSE
+    :target: https://github.com/akamai/NetStorageKit-Python/blob/master/LICENSE
 
 
 NetstorageAPI is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
@@ -69,7 +69,7 @@ Methods
     >>> #       True means 200 OK.
     >>> # INFO: Can "upload" Only a single file, not a directory.
     >>> #       "upload" INDEX_ZIP value is are bool(True or False).
-    >>> #       (This supports only for FileStore)
+    >>> #       (INDEX_ZIP supports only for FileStore and must turn on your configuration)
     >>> # WARN: Can raise NetstorageError at all methods.
     >>>
 

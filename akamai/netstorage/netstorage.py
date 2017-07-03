@@ -121,6 +121,8 @@ class Netstorage:
         return response.status_code == 200, response
 
     def dir(self, ns_path):
+        # if option and type(option) == 'dict':
+        #     pass
         return self._request(action='dir&format=xml', 
                             method='GET', 
                             path=ns_path)
