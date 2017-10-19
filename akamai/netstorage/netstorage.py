@@ -114,9 +114,12 @@ class Netstorage:
             response = requests.post(request_url, headers=headers)
 
         elif kwargs['method'] == 'PUT': # Use only upload
-            mmapped_data = self._upload_data_to_request(kwargs['source'])
-            response = requests.put(request_url, headers=headers, data=mmapped_data)
-            mmapped_data.close()
+            if kwargs['action'] == 'upload':
+                mmapped_data = self._upload_data_to_request(kwargs['source'])
+                response = requests.put(request_url, headers=headers, data=mmapped_data)
+                mmapped_data.close()
+            elif kwargs['action'] == 'upload_stream':
+                response = requests.put(request_url, headers=headers, data=kwargs['source'])
             
         return response.status_code == 200, response
 
@@ -195,4 +198,13 @@ class Netstorage:
         return self._request(action=action,
                             method='PUT',
                             source=local_source,
+                            path=ns_destination)
+    
+    def upload_stream(self, stream, ns_destination):
+        
+        action = 'upload_stream'
+        
+        return self._request(action=action,
+                            method='PUT',
+                            source=stream,
                             path=ns_destination)
