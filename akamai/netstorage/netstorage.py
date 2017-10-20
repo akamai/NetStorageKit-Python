@@ -106,7 +106,8 @@ class Netstorage:
         if kwargs['method'] == 'GET':
             if kwargs['action'] == 'download':
                 response = requests.get(request_url, headers=headers, stream=True)
-                self._download_data_from_response(response, kwargs['path'], kwargs['destination'])
+                if 'stream' not in kwargs.keys():
+                    self._download_data_from_response(response, kwargs['path'], kwargs['destination'])
             else:
                 response = requests.get(request_url, headers=headers)
 
@@ -114,12 +115,12 @@ class Netstorage:
             response = requests.post(request_url, headers=headers)
 
         elif kwargs['method'] == 'PUT': # Use only upload
-            if kwargs['action'] == 'upload':
+            if 'stream' in kwargs.keys():
+                response = requests.put(request_url, headers=headers, data=kwargs['stream'])
+            elif kwargs['action'] == 'upload':
                 mmapped_data = self._upload_data_to_request(kwargs['source'])
                 response = requests.put(request_url, headers=headers, data=mmapped_data)
                 mmapped_data.close()
-            elif kwargs['action'] == 'upload_stream':
-                response = requests.put(request_url, headers=headers, data=kwargs['source'])
             
         return response.status_code == 200, response
 
@@ -137,6 +138,12 @@ class Netstorage:
                             method='GET',
                             path=ns_source,
                             destination=local_destination)
+
+    def stream_download(self, ns_source):
+        return self._request(action='download',
+                             method='GET',
+                             path=ns_source,
+                             stream=True)
 
     def du(self, ns_path):
         return self._request(action='du&format=xml',
@@ -190,8 +197,7 @@ class Netstorage:
         else:
           raise NetstorageError("[NetstorageError] {0} doesn't exist or is directory".format(local_source))  
         
-        action = 'upload'
-        
+        action = 'upload'        
         if index_zip: # Support only For File Store, not Object Store.
             action = action + '&index-zip=1'
         
@@ -200,11 +206,8 @@ class Netstorage:
                             source=local_source,
                             path=ns_destination)
     
-    def upload_stream(self, stream, ns_destination):
-        
-        action = 'upload_stream'
-        
-        return self._request(action=action,
+    def stream_upload(self, data, ns_destination):
+        return self._request(action='upload',
                             method='PUT',
-                            source=stream,
+                            stream=data,
                             path=ns_destination)

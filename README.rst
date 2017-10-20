@@ -61,9 +61,10 @@ Methods
     >>> ns.rename(NETSTORAGE_TARGET, NETSTORAGE_DESTINATION)
     >>> ns.rmdir(NETSTORAGE_DIR)
     >>> ns.stat(NETSTORAGE_PATH)
+    >>> ns.stream_download(NETSTORAGE_SOURCE)
+    >>> ns.stream_upload(DATA, NETSTORAGE_DESTINATION)
     >>> ns.symlink(NETSTORAGE_TARGET, NETSTORAGE_DESTINATION)
-    >>> ns.upload(LOCAL_SOURCE, NETSTORAGE_DESTINATION, INDEX_ZIP)
-    >>>
+    >>> ns.upload(LOCAL_SOURCE_PATH, NETSTORAGE_DESTINATION, INDEX_ZIP)
     >>>
     >>> # INFO: Return (True/False, Response Object from requests.get|post|put)
     >>> #       True means 200 OK.
@@ -84,19 +85,22 @@ You can test all above methods with `unittest script <https://github.com/AstinCH
 
     $ python test/test_netstorage.py
     [TEST] dir /360949 done
-    [TEST] mkdir /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9 done
-    [TEST] upload 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt to /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt done
+    [TEST] mkdir /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0 done
+    [TEST] upload 2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt to /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt done
+    [TEST] stream_upload /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/stream_2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt done
+    [TEST] stream_download /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/stream_2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt done
     [TEST] du done
-    [TEST] mtime /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt to 1462674018 done
+    [TEST] mtime /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt to 1508482349 done
     [TEST] stat done
-    [TEST] symlink /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt to /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_lnk done
-    [TEST] rename /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt to /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_rename done
-    [TEST] download /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_rename done
-    [TEST] delete /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_rename done
-    [TEST] delete /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9/6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_lnk done
-    [TEST] rmdir /360949/048a30de-e6af-45d0-81e6-fc38bf985fb9 done
-    [TEARDOWN] remove 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt from local done
-    [TEARDOWN] remove 6ae30c1a-289a-42a7-9d3d-f634357098b3.txt_rename from local done
+    [TEST] symlink /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt to /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt_lnk done
+    [TEST] rename /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt to /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt_rename done
+    [TEST] download /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt_rename done
+    [TEST] delete /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/stream_2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt done
+    [TEST] delete /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt_rename done
+    [TEST] delete /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0/2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt_lnk done
+    [TEST] rmdir /360949/78fab6cd-f3d8-4fde-a6bf-16dc9c6a22d0 done
+    [TEARDOWN] remove 2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt from local done
+    [TEARDOWN] remove 2f58618a-cacd-4e03-b3a7-21cc92d1bfe9.txt_rename from local done
     .
 
     [TEST] Invalid ns path NetstorageError test done
