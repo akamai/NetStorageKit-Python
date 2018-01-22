@@ -118,7 +118,7 @@ class Netstorage:
         elif kwargs['method'] == 'PUT': # Use only upload
             if 'stream' in kwargs.keys():
                 response = self.http_client.put(request_url, headers=headers, data=kwargs['stream'])
-            elif kwargs['action'] == 'upload':
+            elif kwargs['action'].startswith('upload'):
                 mmapped_data = self._upload_data_to_request(kwargs['source'])
                 response = self.http_client.put(request_url, headers=headers, data=mmapped_data)
                 mmapped_data.close()
