@@ -70,8 +70,8 @@ Methods
     >>> # INFO: Return (True/False, Response Object from requests.get|post|put)
     >>> #       True means 200 OK.
     >>> # INFO: Can "upload" Only a single file, not a directory.
-    >>> #       (Must turn on index_zip on Netstorage configuration 
-    >>> #        to use 'INDEX_ZIP=True')
+    >>> #       To use 'INDEX_ZIP=True',
+    >>> #       Must turn on index_zip on Netstorage configuration 
     >>> # WARN: Can raise NetstorageError at all methods.
     >>>
 
