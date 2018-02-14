@@ -69,7 +69,10 @@ class Netstorage:
         mmapped_data = None
         try:
             with open(source, 'rb') as f:
-                mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+                if os.fstat(f.fileno()).st_size == 0:
+                    mmapped_data = '' 
+                else:
+                    mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         except Exception as e:
             if mmapped_data: mmapped_data.close()
             raise NetstorageError(e)
@@ -121,7 +124,8 @@ class Netstorage:
             elif kwargs['action'].startswith('upload'):
                 mmapped_data = self._upload_data_to_request(kwargs['source'])
                 response = self.http_client.put(request_url, headers=headers, data=mmapped_data)
-                mmapped_data.close()
+                if not isinstance(mmapped_data, str):
+                    mmapped_data.close()
             
         return response.status_code == 200, response
 
