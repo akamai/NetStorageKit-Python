@@ -136,6 +136,11 @@ class Netstorage:
                             method='GET', 
                             path=ns_path)
 
+    def list(self, ns_path):
+        return self._request(action='list&format=xml', 
+                            method='GET', 
+                            path=ns_path)
+
     def download(self, ns_source, local_destination=''):
         if ns_source.endswith('/'):
             raise NetstorageError("[NetstorageError] Nestorage download path shouldn't be a directory: {0}".format(ns_source))

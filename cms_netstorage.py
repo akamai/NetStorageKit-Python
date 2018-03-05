@@ -43,6 +43,8 @@ if __name__ == '__main__':
     action_list = '''\
          dir: to list the contents of the directory /123456
             dir /123456
+         list: to list the contents of the directory /123456 and all subdirectories in one call
+            list /123456
          upload: to upload file.txt to /123456 directory
             upload file.txt /123456/ or
             upload file.txt /123456/file.txt
@@ -98,6 +100,8 @@ if __name__ == '__main__':
                 ok, res = ns.download(args[0], args[1])
             elif options.action == 'du':
                 ok, res = ns.du(args[0])
+            elif options.action == 'list':
+                ok, res = ns.list(args[0])
             elif options.action == 'mkdir':
                 ok, res = ns.mkdir(args[0])
             elif options.action == 'mtime':

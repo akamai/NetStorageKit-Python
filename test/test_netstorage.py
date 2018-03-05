@@ -81,6 +81,11 @@ class TestNetstorage(unittest.TestCase):
         self.assertEqual(True, ok, "dir fail.")
         print("[TEST] dir {0} done".format("/" + self.cpcode_path))
 
+        # dir
+        ok, _ = self.ns.list("/" + self.cpcode_path)
+        self.assertEqual(True, ok, "list fail.")
+        print("[TEST] list {0} done".format("/" + self.cpcode_path))
+
         # mkdir
         ok, _ = self.ns.mkdir(self.temp_ns_dir)
         self.assertEqual(True, ok, "mkdir fail.")
