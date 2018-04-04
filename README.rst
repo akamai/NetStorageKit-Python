@@ -58,7 +58,7 @@ Methods
     ...  'end': '/end/path/',
     ...  'prefix': 'object-prefix',
     ...  'slash': 'both',
-    ...  'encoding': 'utf8'
+    ...  'encoding': 'utf-8'
     ... }
     >>> ns.dir(NETSTORAGE_PATH, dir_option)
     >>> ns.download(NETSTORAGE_SOURCE, LOCAL_DESTINATION)
@@ -66,7 +66,7 @@ Methods
     >>> list_option = {
     ...  'max_entries': INTEGER,
     ...  'end': '/end/path/',
-    ...  'encoding': 'utf8'
+    ...  'encoding': 'utf-8'
     ... }
     >>> ns.list(NETSTORAGE_PATH, list_option)
     >>> ns.mkdir(NETSTORAGE_PATH + DIRECTORY_NAME)

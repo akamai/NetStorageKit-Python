@@ -105,6 +105,16 @@ class TestNetstorage(unittest.TestCase):
         self.assertEqual(stream_upload_text, res.text, "stream download fail")
         print("[TEST] stream_download {0} done".format(self.temp_ns_stream_file))
 
+        # list
+        ok, _ = self.ns.list("/" + self.cpcode_path, {
+                'max_entries': 1, 
+                'end': self.temp_ns_dir,
+                'encoding': 'utf-8'
+            }
+        )
+        self.assertEqual(True, ok, "dir fail.")
+        print("[TEST] dir {0} done".format("/" + self.cpcode_path))
+
         # du
         ok, res = self.ns.du(self.temp_ns_dir)
         self.assertEqual(True, ok)
