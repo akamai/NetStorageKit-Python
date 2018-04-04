@@ -27,9 +27,9 @@ import random
 import sys
 import time
 if sys.version_info[0] >= 3:
-    from urllib.parse import quote_plus, quote
+    from urllib.parse import quote_plus, quote, urlencode
 else:
-    from urllib import quote_plus, quote
+    from urllib import quote_plus, quote, urlencode
     
 import requests
 
@@ -69,7 +69,10 @@ class Netstorage:
         mmapped_data = None
         try:
             with open(source, 'rb') as f:
-                mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+                if os.fstat(f.fileno()).st_size == 0:
+                    mmapped_data = '' 
+                else:
+                    mmapped_data = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         except Exception as e:
             if mmapped_data: mmapped_data.close()
             raise NetstorageError(e)
@@ -121,14 +124,20 @@ class Netstorage:
             elif kwargs['action'].startswith('upload'):
                 mmapped_data = self._upload_data_to_request(kwargs['source'])
                 response = self.http_client.put(request_url, headers=headers, data=mmapped_data)
-                mmapped_data.close()
+                if not isinstance(mmapped_data, str):
+                    mmapped_data.close()
             
         return response.status_code == 200, response
 
-    def dir(self, ns_path):
-        # if option and type(option) == 'dict':
-        #     pass
-        return self._request(action='dir&format=xml', 
+    def dir(self, ns_path, option={}):
+        option = "dir&format=xml&{0}".format(urlencode(option))
+        return self._request(action=option, 
+                            method='GET', 
+                            path=ns_path)
+
+    def list(self, ns_path, option={}):
+        option = "list&format=xml&{0}".format(urlencode(option))
+        return self._request(action=option, 
                             method='GET', 
                             path=ns_path)
 

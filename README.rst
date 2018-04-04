@@ -52,9 +52,24 @@ Methods
 .. code-block:: python
 
     >>> ns.delete(NETSTORAGE_PATH)
-    >>> ns.dir(NETSTORAGE_PATH)
+    >>> dir_option = { 
+    ...  'max_entries': INTEGER,
+    ...  'start': '/start/path',
+    ...  'end': '/end/path/',
+    ...  'prefix': 'object-prefix',
+    ...  'slash': 'both',
+    ...  'encoding': 'utf8'
+    ... }
+    >>> ns.dir(NETSTORAGE_PATH, dir_option)
     >>> ns.download(NETSTORAGE_SOURCE, LOCAL_DESTINATION)
     >>> ns.du(NETSTORAGE_PATH)
+    >>>
+    >>> list_option = {
+    ...  'max_entries': INTEGER,
+    ...  'end': '/end/path/',
+    ...  'encoding': 'utf8'
+    ... }
+    >>> ns.list(NETSTORAGE_PATH, list_option)
     >>> ns.mkdir(NETSTORAGE_PATH + DIRECTORY_NAME)
     >>> ns.mtime(NETSTORAGE_PATH, TIME) # ex) TIME: int(time.time())
     >>> ns.quick_delete(NETSTORAGE_DIR) # needs to be enabled on the CP Code
@@ -71,7 +86,7 @@ Methods
     >>> #       True means 200 OK.
     >>> # INFO: Can "upload" Only a single file, not a directory.
     >>> #       To use 'INDEX_ZIP=True',
-    >>> #       Must turn on index_zip on Netstorage configuration 
+    >>> #       Must turn on index_zip on your Netstorage configuration 
     >>> # WARN: Can raise NetstorageError at all methods.
     >>>
 
