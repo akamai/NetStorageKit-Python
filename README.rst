@@ -63,7 +63,6 @@ Methods
     >>> ns.dir(NETSTORAGE_PATH, dir_option)
     >>> ns.download(NETSTORAGE_SOURCE, LOCAL_DESTINATION)
     >>> ns.du(NETSTORAGE_PATH)
-    >>>
     >>> list_option = {
     ...  'max_entries': INTEGER,
     ...  'end': '/end/path/',
