@@ -112,6 +112,8 @@ if __name__ == '__main__':
                 ok, res = ns.symlink(args[0], args[1])
             elif options.action == 'upload':
                 ok, res = ns.upload(args[0], args[1])
+            elif options.action == 'rename':
+                ok, res = ns.rename(args[0], args[1])
             else:
                 print("Invalid action.\nUse option -h or --help")
                 exit()
