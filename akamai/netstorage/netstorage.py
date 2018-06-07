@@ -208,8 +208,8 @@ class Netstorage:
           raise NetstorageError("[NetstorageError] {0} doesn't exist or is directory".format(local_source))  
         
         action = 'upload'        
-        if index_zip: # Support only For File Store, not Object Store.
-            action = action + '&index-zip=1'
+        if index_zip is True or index_zip.lower() == 'true':
+            action = action + '&index-zip=2'
         
         return self._request(action=action,
                             method='PUT',
