@@ -68,7 +68,7 @@ if __name__ == '__main__':
          rmdir: to delete /123456/dir1 (directory needs to be empty)
             rmdir /123456/dir1
 '''
-    usage = 'Usage: python cms_netstorage.py -H [hostname] -k [keyname] -K [key] -action [action_options] ..'
+    usage = 'Usage: python cms_netstorage.py -H [hostname] -k [keyname] -K [key] -a [action_options] ..'
     parser = NetstorageParser(usage=usage, epilog=action_list)
 
     parser.add_option(
@@ -111,7 +111,7 @@ if __name__ == '__main__':
             elif options.action == 'symlink':
                 ok, res = ns.symlink(args[0], args[1])
             elif options.action == 'upload':
-                ok, res = ns.upload(args[0], args[1])
+                ok, res = ns.upload(args[0], args[1], args[2])
             elif options.action == 'rename':
                 ok, res = ns.rename(args[0], args[1])
             else:

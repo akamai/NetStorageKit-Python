@@ -215,7 +215,7 @@ class Netstorage:
                             method='PUT',
                             source=local_source,
                             path=ns_destination)
-    
+     
     def stream_upload(self, data, ns_destination):
         return self._request(action='upload',
                             method='PUT',
