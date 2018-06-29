@@ -111,7 +111,7 @@ if __name__ == '__main__':
             elif options.action == 'symlink':
                 ok, res = ns.symlink(args[0], args[1])
             elif options.action == 'upload':
-                ok, res = ns.upload(args[0], args[1], args[2])
+                ok, res = ns.upload(args[0], args[1])
             elif options.action == 'rename':
                 ok, res = ns.rename(args[0], args[1])
             else:
