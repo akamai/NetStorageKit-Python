@@ -17,6 +17,7 @@
 # limitations under the License.
 
 
+import ast
 import optparse, sys
 
 from akamai.netstorage import Netstorage
@@ -93,7 +94,15 @@ if __name__ == '__main__':
             if options.action == 'delete':
                 ok, res = ns.delete(args[0])
             elif options.action == 'dir':
-                ok, res = ns.dir(args[0])
+                if len(args) >= 2:
+                    ok, res = ns.dir(args[0], ast.literal_eval(args[1]))
+                else:
+                    ok, res = ns.dir(args[0])
+            elif options.action == 'list':
+                if len(args) >= 2:
+                    ok, res = ns.list(args[0], ast.literal_eval(args[1]))
+                else:
+                    ok, res = ns.list(args[0])
             elif options.action == 'download':
                 ok, res = ns.download(args[0], args[1])
             elif options.action == 'du':
@@ -111,7 +120,10 @@ if __name__ == '__main__':
             elif options.action == 'symlink':
                 ok, res = ns.symlink(args[0], args[1])
             elif options.action == 'upload':
-                ok, res = ns.upload(args[0], args[1], args[2])
+                if len(args) >= 3:
+                    ok, res = ns.upload(args[0], args[1], args[2])
+                else:
+                    ok, res = ns.upload(args[0], args[1])
             elif options.action == 'rename':
                 ok, res = ns.rename(args[0], args[1])
             else:

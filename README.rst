@@ -54,8 +54,8 @@ Methods
     >>> ns.delete(NETSTORAGE_PATH)
     >>> dir_option = { 
     ...  'max_entries': INTEGER,
-    ...  'start': '/start/path',
-    ...  'end': '/end/path/',
+    ...  'start': 'STRING',
+    ...  'end': 'STRING',
     ...  'prefix': 'object-prefix',
     ...  'slash': 'both',
     ...  'encoding': 'utf-8'
@@ -65,7 +65,7 @@ Methods
     >>> ns.du(NETSTORAGE_PATH)
     >>> list_option = {
     ...  'max_entries': INTEGER,
-    ...  'end': '/end/path/',
+    ...  'end': '/CPCODE/path',
     ...  'encoding': 'utf-8'
     ... }
     >>> ns.list(NETSTORAGE_PATH, list_option)
