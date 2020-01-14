@@ -18,7 +18,7 @@ setup (
     ],
     author = 'Astin Choi',
     author_email = 'asciineo@gmail.com',
-    url = 'https://github.com/AstinCHOI/akamai-netstorage',
+    url = 'https://github.com/akamai/NetStorageKit-Python',
     license='Apache 2.0',
     keywords='netstorage akamai open api',
     classifiers=[
