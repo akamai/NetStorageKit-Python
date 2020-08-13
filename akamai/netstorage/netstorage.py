@@ -209,7 +209,7 @@ class Netstorage:
         
         action = 'upload'        
         if index_zip is True or str(index_zip).lower() == 'true':
-            action = action + '&index-zip=2'
+            action = action + '&index-zip=1'
         
         return self._request(action=action,
                             method='PUT',
