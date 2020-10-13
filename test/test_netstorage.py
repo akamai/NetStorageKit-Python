@@ -146,7 +146,7 @@ class TestNetstorage(unittest.TestCase):
         print("[TEST] rename {0} to {1} done".format(self.temp_ns_file, self.temp_ns_file + "_rename"))
         
         # download
-        ok, _ = self.ns.download(self.temp_ns_file + "_rename")
+        ok, _ = self.ns.download(self.temp_ns_file + "_rename", "", )
         self.assertEqual(True, ok, "download fail.")
         print("[TEST] download {0} done".format(self.temp_ns_file + "_rename"))
 
