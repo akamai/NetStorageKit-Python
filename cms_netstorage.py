@@ -69,7 +69,7 @@ if __name__ == '__main__':
          rmdir: to delete /123456/dir1 (directory needs to be empty)
             rmdir /123456/dir1
 '''
-    usage = 'Usage: python cms_netstorage.py -H [hostname] -k [keyname] -K [key] -a [action_options] ..'
+    usage = 'Usage: python cms_netstorage.py -H [hostname] -k [keyname] -K [key] -t [timeout] -s [use ssl] -a [action_options] ..'
     parser = NetstorageParser(usage=usage, epilog=action_list)
 
     parser.add_option(
@@ -83,49 +83,58 @@ if __name__ == '__main__':
         help='Netstorage API key ex) xxxxxxxxxxxxx')
     parser.add_option(
         '-a', '--action', dest='action')
+    parser.add_option(
+        '-s', '--ssl', dest='ssl')
+    parser.add_option(
+        '-t', '--timeout', dest='timeout')
 
     (options, args) = parser.parse_args()
 
     if options.hostname and options.keyname and options.key and options.action:
-        ns = Netstorage(options.hostname, options.keyname, options.key)
+        ssl = options.ssl if hasattr(options, 'ssl') else False
+        timeout = options.timeout if hasattr(options, 'timeout') else None
+        ns = Netstorage(options.hostname, options.keyname, options.key, ssl, timeout)
+
+        def _arg(key, default=None):
+            return args[key] if key in args else default
 
         try:
             res = None
             if options.action == 'delete':
-                ok, res = ns.delete(args[0])
+                ok, res = ns.delete(args[0], _arg(1))
             elif options.action == 'dir':
                 if len(args) >= 2:
-                    ok, res = ns.dir(args[0], ast.literal_eval(args[1]))
+                    ok, res = ns.dir(args[0], ast.literal_eval(args[1]), _arg(2))
                 else:
                     ok, res = ns.dir(args[0])
             elif options.action == 'list':
                 if len(args) >= 2:
-                    ok, res = ns.list(args[0], ast.literal_eval(args[1]))
+                    ok, res = ns.list(args[0], ast.literal_eval(args[1]), _arg(2))
                 else:
                     ok, res = ns.list(args[0])
             elif options.action == 'download':
-                ok, res = ns.download(args[0], args[1])
+                ok, res = ns.download(args[0], args[1], _arg(2))
             elif options.action == 'du':
-                ok, res = ns.du(args[0])
+                ok, res = ns.du(args[0], _arg(1))
             elif options.action == 'mkdir':
-                ok, res = ns.mkdir(args[0])
+                ok, res = ns.mkdir(args[0], _arg(1))
             elif options.action == 'mtime':
-                ok, res = ns.mtime(args[0], args[1])
+                ok, res = ns.mtime(args[0], args[1], _arg(2))
             elif options.action == 'quick-delete':
-                ok, res = ns.quick_delete(args[0])
+                ok, res = ns.quick_delete(args[0], _arg(1))
             elif options.action == 'rmdir':
-                ok, res = ns.rmdir(args[0])
+                ok, res = ns.rmdir(args[0], _arg(1))
             elif options.action == 'stat':
-                ok, res = ns.stat(args[0])
+                ok, res = ns.stat(args[0], _arg(1))
             elif options.action == 'symlink':
-                ok, res = ns.symlink(args[0], args[1])
+                ok, res = ns.symlink(args[0], args[1], _arg(2))
             elif options.action == 'upload':
                 if len(args) >= 3:
-                    ok, res = ns.upload(args[0], args[1], args[2])
+                    ok, res = ns.upload(args[0], args[1], args[2], _arg(3))
                 else:
                     ok, res = ns.upload(args[0], args[1])
             elif options.action == 'rename':
-                ok, res = ns.rename(args[0], args[1])
+                ok, res = ns.rename(args[0], args[1], _arg(1))
             else:
                 print("Invalid action.\nUse option -h or --help")
                 exit()
@@ -134,7 +143,7 @@ if __name__ == '__main__':
                 
         except IndexError as e:
             if options.action == 'download' and args[0]:
-                ok, res = ns.download(args[0])
+                ok, res = ns.download(args[0], '', _arg(1))
                 print_result(res, options.action)
             else:
                 print("Invalid argument.\n")
