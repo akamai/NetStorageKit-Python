@@ -92,8 +92,7 @@ if __name__ == '__main__':
 
     if options.hostname and options.keyname and options.key and options.action:
         ssl = options.ssl if hasattr(options, 'ssl') else False
-        timeout = options.timeout if hasattr(options, 'timeout') else None
-        ns = Netstorage(options.hostname, options.keyname, options.key, ssl, timeout)
+        ns = Netstorage(options.hostname, options.keyname, options.key, ssl)
 
         def _arg(key, default=None):
             return args[key] if key in args else default

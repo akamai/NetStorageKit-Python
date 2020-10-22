@@ -39,7 +39,7 @@ class NetstorageError(Exception):
 
 
 class Netstorage:
-    def __init__(self, hostname, keyname, key, ssl=False, timeout=None):
+    def __init__(self, hostname, keyname, key, ssl=False):
         if not (hostname and keyname and key):
             raise NetstorageError('[NetstorageError] You should input netstorage hostname, keyname and key all')
 
@@ -47,7 +47,6 @@ class Netstorage:
         self.keyname = keyname
         self.key = key
         self.ssl = 's' if ssl else ''
-        self.timeout = timeout
         self.http_client = requests.Session()
         
         
@@ -107,7 +106,7 @@ class Netstorage:
             'User-Agent': 'NetStorageKit-Python'
         }
 
-        timeout = kwargs['timeout'] if 'timeout' in kwargs else self.timeout
+        timeout = kwargs['timeout'] if 'timeout' in kwargs else None
         
         response = None
         if kwargs['method'] == 'GET':
