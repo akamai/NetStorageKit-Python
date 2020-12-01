@@ -14,6 +14,10 @@ NetstorageAPI: Akamai Netstorage API for Python
 NetstorageAPI is Akamai Netstorage (File/Object Store) API for Python and uses `requests <http://docs.python-requests.org>`_.
 NetstorageAPI supports Python 2.6–2.7 & 3.3–3.6, and runs great on PyPy as `requests <http://docs.python-requests.org>`_.
 
+Important
+------------
+
+Akamai does not maintain or regulate this package. While it can be incorporated to assist you in API use, Akamai Technical Support will not offer assistance and Akamai cannot be held liable if issues arrise from its use. 
 
 Installation
 ------------
