@@ -105,102 +105,117 @@ class Netstorage:
             'Accept-Encoding': 'identity',
             'User-Agent': 'NetStorageKit-Python'
         }
+
+        timeout = kwargs['timeout'] if 'timeout' in kwargs else None
         
         response = None
         if kwargs['method'] == 'GET':
             if kwargs['action'] == 'download':
-                response = self.http_client.get(request_url, headers=headers, stream=True)
+                response = self.http_client.get(request_url, headers=headers, timeout=timeout, stream=True)
                 if 'stream' not in kwargs.keys():
                     self._download_data_from_response(response, kwargs['path'], kwargs['destination'])
             else:
-                response = self.http_client.get(request_url, headers=headers)
+                response = self.http_client.get(request_url, headers=headers, timeout=timeout)
 
         elif kwargs['method'] == 'POST':
-            response = self.http_client.post(request_url, headers=headers)
+            response = self.http_client.post(request_url, headers=headers, timeout=timeout)
 
         elif kwargs['method'] == 'PUT': # Use only upload
             if 'stream' in kwargs.keys():
-                response = self.http_client.put(request_url, headers=headers, data=kwargs['stream'])
+                response = self.http_client.put(request_url, headers=headers, timeout=timeout, data=kwargs['stream'])
             elif kwargs['action'].startswith('upload'):
                 mmapped_data = self._upload_data_to_request(kwargs['source'])
-                response = self.http_client.put(request_url, headers=headers, data=mmapped_data)
+                response = self.http_client.put(request_url, headers=headers, timeout=timeout, data=mmapped_data)
                 if not isinstance(mmapped_data, str):
                     mmapped_data.close()
             
         return response.status_code == 200, response
 
-    def dir(self, ns_path, option={}):
+    def dir(self, ns_path, option={}, timeout=None):
         option = "dir&format=xml&{0}".format(urlencode(option))
         return self._request(action=option, 
                             method='GET', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def list(self, ns_path, option={}):
+    def list(self, ns_path, option={}, timeout=None):
         option = "list&format=xml&{0}".format(urlencode(option))
         return self._request(action=option, 
                             method='GET', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def download(self, ns_source, local_destination=''):
+    def download(self, ns_source, local_destination='', timeout=None):
         if ns_source.endswith('/'):
             raise NetstorageError("[NetstorageError] Nestorage download path shouldn't be a directory: {0}".format(ns_source))
         return self._request(action='download', 
                             method='GET',
                             path=ns_source,
-                            destination=local_destination)
+                            destination=local_destination,
+                            timeout=timeout)
 
-    def stream_download(self, ns_source):
+    def stream_download(self, ns_source, timeout=None):
         return self._request(action='download',
                              method='GET',
                              path=ns_source,
-                             stream=True)
+                             stream=True,
+                             timeout=timeout)
 
-    def du(self, ns_path):
+    def du(self, ns_path, timeout=None):
         return self._request(action='du&format=xml',
                             method='GET', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def stat(self, ns_path):
+    def stat(self, ns_path, timeout=None):
         return self._request(action='stat&format=xml',
                             method='GET',
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def mkdir(self, ns_path):
+    def mkdir(self, ns_path, timeout=None):
         return self._request(action='mkdir',
                             method='POST', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def rmdir(self, ns_path):
+    def rmdir(self, ns_path, timeout=None):
         return self._request(action='rmdir',
                             method='POST',
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def mtime(self, ns_path, mtime):
+    def mtime(self, ns_path, mtime, timeout=None):
         return self._request(action='mtime&format=xml&mtime={0}'.format(mtime),
                             method='POST', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def delete(self, ns_path):
+    def delete(self, ns_path, timeout=None):
         return self._request(action='delete',
                             method='POST', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def quick_delete(self, ns_path):
+    def quick_delete(self, ns_path, timeout=None):
         return self._request(action='quick-delete&quick-delete=imreallyreallysure',
                             method='POST', 
-                            path=ns_path)
+                            path=ns_path,
+                            timeout=timeout)
 
-    def rename(self, ns_target, ns_destination):
+    def rename(self, ns_target, ns_destination, timeout=None):
         return self._request(action='rename&destination={0}'.format(quote_plus(ns_destination)),
                             method='POST',
-                            path=ns_target)
+                            path=ns_target,
+                            timeout=timeout)
 
-    def symlink(self, ns_target, ns_destination):
+    def symlink(self, ns_target, ns_destination, timeout=None):
         return self._request(action='symlink&target={0}'.format(quote_plus(ns_target)),
                             method='POST',
-                            path=ns_destination)
+                            path=ns_destination,
+                            timeout=timeout)
     
-    def upload(self, local_source, ns_destination, index_zip=False):
+    def upload(self, local_source, ns_destination, index_zip=False, timeout=None):
         if os.path.isfile(local_source):
             if ns_destination.endswith('/'):
                 ns_destination = "{0}{1}".format(ns_destination, ntpath.basename(local_source))
@@ -214,10 +229,12 @@ class Netstorage:
         return self._request(action=action,
                             method='PUT',
                             source=local_source,
-                            path=ns_destination)
+                            path=ns_destination,
+                            timeout=timeout)
      
-    def stream_upload(self, data, ns_destination):
+    def stream_upload(self, data, ns_destination, timeout=None):
         return self._request(action='upload',
                             method='PUT',
                             stream=data,
-                            path=ns_destination)
+                            path=ns_destination,
+                            timeout=timeout)
