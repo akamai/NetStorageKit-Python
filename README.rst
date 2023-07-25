@@ -143,6 +143,11 @@ You can run the `script <https://github.com/AstinCHOI/NetStorageKit-Python/blob/
     
 Use -h or --help option for more detail.
 
+Upsteam Documentation
+---------------------
+
+See `Netstorage <https://learn.akamai.com/en-us/products/media_delivery/netstorage.html>`_ in Akamai's Documentation.
+
 
 Author
 ------
