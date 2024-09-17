@@ -16,17 +16,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #adding folderUpload support
-
+import os
 import ast
 import optparse, sys
-
 from akamai.netstorage import Netstorage
-
 
 class NetstorageParser(optparse.OptionParser):
     def format_epilog(self, formatter):
         return self.epilog
-
 
 def print_result(response, action):
     print("=== Request Header ===")
@@ -39,14 +36,38 @@ def print_result(response, action):
         print("=== Response Content ===")
         print(response.text)
 
+# Uploads a single file to NetStorage
+def upload_file(ns, local_file, remote_file):
+    print(f"Uploading {local_file} to {remote_file}")
+    
+    # If the upload method requires three arguments
+    ok, res = ns.upload(local_file, remote_file)
+    
+    # Check if the upload was successful
+    if ok:
+        print(f"Upload successful: {local_file} -> {remote_file}")
+    else:
+        print(f"Upload failed: {local_file} -> {remote_file}")
+    
+    return ok, res
+
+# Recursively upload directory contents
+def upload_directory(ns, local_dir, remote_dir):
+    for root, dirs, files in os.walk(local_dir):
+        for file in files:
+            local_file_path = os.path.join(root, file)
+            relative_path = os.path.relpath(local_file_path, local_dir)  # Preserve directory structure
+            remote_file_path = os.path.join(remote_dir, relative_path).replace("\\", "/")  # Ensure remote path uses forward slashes
+            ok, response = upload_file(ns, local_file_path, remote_file_path)
+            print_result(response, 'upload')
 
 if __name__ == '__main__':
     action_list = '''\
          dir: to list the contents of the directory /123456
             dir /123456
-         upload: to upload file.txt to /123456 directory
+         upload: to upload file.txt or a folder to /123456 directory
             upload file.txt /123456/ or
-            upload file.txt /123456/file.txt
+            upload uploaddir /123456/uploaddir
          stat: to display status of /123456/file.txt
             stat /123456/file.txt
          du: to display disk usage on directory /123456
@@ -90,6 +111,7 @@ if __name__ == '__main__':
         ns = Netstorage(options.hostname, options.keyname, options.key)
 
         try:
+            skipFinalLog = False
             res = None
             if options.action == 'delete':
                 ok, res = ns.delete(args[0])
@@ -120,18 +142,27 @@ if __name__ == '__main__':
             elif options.action == 'symlink':
                 ok, res = ns.symlink(args[0], args[1])
             elif options.action == 'upload':
-                if len(args) >= 3:
-                    ok, res = ns.upload(args[0], args[1], args[2])
+                local_path = args[0]
+                remote_path = args[1]
+
+                if os.path.isdir(local_path):
+                    # Upload directory recursively
+                    skipFinalLog = True
+                    upload_directory(ns, local_path, remote_path)
+                elif os.path.isfile(local_path):
+                    # Upload single file
+                    ok, res = upload_file(ns, local_path, remote_path)
+                    
                 else:
-                    ok, res = ns.upload(args[0], args[1])
+                    print(f"Invalid path: {local_path}. Must be a file or directory.")
             elif options.action == 'rename':
                 ok, res = ns.rename(args[0], args[1])
             else:
                 print("Invalid action.\nUse option -h or --help")
                 exit()
-            
-            print_result(res, options.action)
-                
+            if not skipFinalLog:
+                print_result(res, options.action)
+
         except IndexError as e:
             if options.action == 'download' and args[0]:
                 ok, res = ns.download(args[0])
