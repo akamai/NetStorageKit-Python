@@ -66,3 +66,6 @@ target/
 .DS_Store
 test/secret.py
 spike/
+
+
+upload-test-dir/
